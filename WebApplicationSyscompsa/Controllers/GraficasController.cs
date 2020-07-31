@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using WebApplicationSyscompsa.Models;
 
 namespace WebApplicationSyscompsa.Controllers
@@ -19,8 +14,6 @@ namespace WebApplicationSyscompsa.Controllers
         public GraficasController(AppDbContext context)
         {
             this._context = context;
-            
-
         }
 
         [HttpGet]
@@ -41,7 +34,6 @@ namespace WebApplicationSyscompsa.Controllers
                     adapter.Fill(dt);
                 }
             }
-
             if (dt == null)
             {
                 return NotFound("");
@@ -120,7 +112,6 @@ namespace WebApplicationSyscompsa.Controllers
                     adapter.Fill(dt);
                 }
             }
-
             if (dt == null)
             {
                 return NotFound("");
@@ -146,7 +137,6 @@ namespace WebApplicationSyscompsa.Controllers
                     adapter.Fill(dt);
                 }
             }
-
             if (dt == null)
             { return NotFound(""); }
 

@@ -12,5 +12,7 @@ namespace WebApplicationSyscompsa.Models
         : base(options)
         {
         }
+        public DbSet<Web_Paleta> Web_Paleta { get; set; }
+
     }
 }

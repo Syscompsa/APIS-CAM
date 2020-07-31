@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Paulo\\source\\repos\\WebApplicationSyscompsa\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj": {}
+    "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Paulo\\source\\repos\\WebApplicationSyscompsa\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj": {
+    "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Paulo\\source\\repos\\WebApplicationSyscompsa\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj",
+        "projectUniqueName": "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj",
         "projectName": "WebApplicationSyscompsa",
-        "projectPath": "C:\\Users\\Paulo\\source\\repos\\WebApplicationSyscompsa\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj",
+        "projectPath": "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj",
         "packagesPath": "C:\\Users\\Paulo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Paulo\\source\\repos\\WebApplicationSyscompsa\\WebApplicationSyscompsa\\obj\\",
+        "outputPath": "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -64,6 +64,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[3.1.6, )"
+            },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.9.10, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",

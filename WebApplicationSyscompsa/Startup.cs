@@ -25,16 +25,15 @@ namespace WebApplicationSyscompsa
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            
+        {            
             services.AddControllers();
 
             var connection = @"Data Source = 181.196.189.58,59925\\SQLEXPRESS; Initial Catalog = SQLOSTRATEK; Persist Security Info = True; User ID = sa; Password = Rootpass1";
+            // var connectionB = @"Data Source = syswebservice\sqlexpress\\SQLEXPRESS; Initial Catalog = WEBCIA01; Persist Security Info = True; User ID = sa; Password = Rootpass1";
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
-            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
