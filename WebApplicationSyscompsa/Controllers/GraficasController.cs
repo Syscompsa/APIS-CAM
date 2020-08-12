@@ -129,16 +129,20 @@ namespace WebApplicationSyscompsa.Controllers
                                 " where fechaven > GETDATE()";
 
             DataTable dt = new DataTable();
+
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(Sentencia, connection))
                 {
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    adapter.Fill(dt);
+                   SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                   adapter.Fill(dt);
                 }
             }
+
             if (dt == null)
-            { return NotFound(""); }
+            {
+                return NotFound("");
+            }
 
             return Ok(dt);
         }

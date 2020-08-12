@@ -28,10 +28,14 @@ namespace WebApplicationSyscompsa
         {            
             services.AddControllers();
 
-            var connection = @"Data Source = 181.196.189.58,59925\\SQLEXPRESS; Initial Catalog = SQLOSTRATEK; Persist Security Info = True; User ID = sa; Password = Rootpass1";
+            //var connection = @"Data Source = 181.196.189.58,59925\\SQLEXPRESS; Initial Catalog = SQLOSTRATEK; Persist Security Info = True; User ID = sa; Password = Rootpass1";
+            //var connectionB = @"Data Source = JOSE\SQLEXPRESS; Initial Catalog = CIA01; Persist Security Info = True; User ID = sa; Password = a";
+            var connectionB = @"Data Source = CIA01-Web.mssql.somee.com;" +
+                              "Initial Catalog = CIA01-Web; Persist Security Info = True;" +
+                              "User ID = AkaliServer90_SQLLogin_1; Password = cveb2x36w4;";
             // var connectionB = @"Data Source = syswebservice\sqlexpress\\SQLEXPRESS; Initial Catalog = WEBCIA01; Persist Security Info = True; User ID = sa; Password = Rootpass1";
 
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionB));
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);            
         }
