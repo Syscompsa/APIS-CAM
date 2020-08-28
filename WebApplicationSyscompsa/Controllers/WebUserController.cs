@@ -19,6 +19,12 @@ namespace WebApplicationSyscompsa.Controllers
         {
             this._context = context;
         }
+        [HttpGet]
+        [Route("GetUsuarios")]
+        public IEnumerable<WebUser> GetClientes()
+        {
+            return _context.WebUser;
+        }
 
         [HttpPost]
         [Route("login")]

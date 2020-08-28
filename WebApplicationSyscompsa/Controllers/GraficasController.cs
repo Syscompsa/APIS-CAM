@@ -25,14 +25,12 @@ namespace WebApplicationSyscompsa.Controllers
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(Sentencia, connection))
-                {
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    adapter.SelectCommand.CommandType = CommandType.Text;
-                    //adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
-                    adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
-                    adapter.Fill(dt);
-                }
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                //adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
+                adapter.Fill(dt);
             }
             if (dt == null)
             {
@@ -50,14 +48,12 @@ namespace WebApplicationSyscompsa.Controllers
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(Sentencia, connection))
-                {
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    adapter.SelectCommand.CommandType = CommandType.Text;
-                    //adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
-                    adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
-                    adapter.Fill(dt);
-                }
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                //adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
+                adapter.Fill(dt);
             }
 
             if (dt == null)
@@ -76,14 +72,12 @@ namespace WebApplicationSyscompsa.Controllers
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(Sentencia, connection))
-                {
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    adapter.SelectCommand.CommandType = CommandType.Text;
-                    //adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
-                    adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
-                    adapter.Fill(dt);
-                }
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                //adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
+                adapter.Fill(dt);
             }
 
             if (dt == null)
@@ -103,14 +97,12 @@ namespace WebApplicationSyscompsa.Controllers
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(Sentencia, connection))
-                {
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    adapter.SelectCommand.CommandType = CommandType.Text;
-                    //adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
-                    adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
-                    adapter.Fill(dt);
-                }
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                //adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@siembra", siembra));
+                adapter.Fill(dt);
             }
             if (dt == null)
             {
@@ -132,11 +124,9 @@ namespace WebApplicationSyscompsa.Controllers
 
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(Sentencia, connection))
-                {
-                   SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                   adapter.Fill(dt);
-                }
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(dt);
             }
 
             if (dt == null)
@@ -145,6 +135,7 @@ namespace WebApplicationSyscompsa.Controllers
             }
 
             return Ok(dt);
+
         }
 
     }

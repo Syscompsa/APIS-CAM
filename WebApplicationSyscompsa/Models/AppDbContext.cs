@@ -18,5 +18,11 @@ namespace WebApplicationSyscompsa.Models
         public DbSet<Dp12a120> DP12A120 { get; set; }
         public DbSet<Inventory_Data> Inventory_Data { get; set; }
         public DbSet<Placa_Post_Url> Placa_Post_Url { get; set; }
+        public DbSet<Demo> Demo { get; set; }
+        public DbSet<Interface_activoFijo> Interface_activoFijo { get; set; }
+        public DbSet<ALPTABLA> ALPTABLA { get; set; }
+        public DbSet<DP12A110> DP12A110 { get; set; }
+
+
     }
 }

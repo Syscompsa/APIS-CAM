@@ -44,8 +44,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             {
                 return NotFound("");
             }
-            return Ok(dt);
-        
+            return Ok(dt);        
         }
 
         [HttpGet]
@@ -53,7 +52,6 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         public ActionResult<DataTable> getQRGen([FromRoute] int Id)
         {
             string Sentencia = "select * from DP12A120";
-
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
@@ -80,6 +78,27 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             if (ModelState.IsValid)
             {
                 _context.DP12A120.Add(model);
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    return Ok(model);
+                }
+                else
+                { return BadRequest("Datos incorrectos"); }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
+        [HttpPost]
+        [Route("InvSave")]
+        public async Task<IActionResult> InvSave([FromBody] Demo model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                _context.Demo.Add(model);
                 if (await _context.SaveChangesAsync() > 0)
                 {
                     return Ok(model);

@@ -9,7 +9,7 @@
     <WebStackScaffolding_IsReferencingScriptLibrariesSelected>True</WebStackScaffolding_IsReferencingScriptLibrariesSelected>
     <WebStackScaffolding_LayoutPageFile />
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
-    <NameOfLastUsedPublishProfile>syscapi-inv - Web Deploy</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>inventario-fijo - Web Deploy</NameOfLastUsedPublishProfile>
     <ShowAllFiles>false</ShowAllFiles>
     <ActiveDebugProfile>WebApplicationSyscompsa</ActiveDebugProfile>
   </PropertyGroup>
