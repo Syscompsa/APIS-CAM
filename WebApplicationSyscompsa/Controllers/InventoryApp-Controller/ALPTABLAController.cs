@@ -45,36 +45,18 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
         }
 
-        [HttpGet]
-        [Route("GrupoActivoGen")]
-        public ActionResult<DataTable> GrupoActivoGen()
-        {
-            //actualmente solo hay un codigo asignado 001 = varios
-            string Sentencia = "Select codigo,nombre from alptabla where master=" +
-                               "(select codigo from alptabla where nomtag='INVGRUPO')";
-
-            DataTable dt = new DataTable();
-            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
-            {
-                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.SelectCommand.CommandType = CommandType.Text;
-                // adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", codigo));
-                adapter.Fill(dt);
-            }
-            if (dt == null)
-            {
-                return NotFound("");
-            }
-            return Ok(dt);
-        }
 
         [HttpGet]
         [Route("Modelo/{codigo}")]
+
         public ActionResult<DataTable> Modelo([FromRoute] string codigo)
         {
-            string Sentencia = "Select codigo,nombre from alptabla where master=" +
-                               "(select codigo from alptabla where nomtag='IA_MODELO') and codigo=@codigo";
+            //string Sentencia = "Select codigo,nombre from alptabla where master ="+
+            //                   "(select codigo from alptabla where nomtag = 'IA_MODELO') and codigo= @codigo";
+
+            string Sentencia = "declare @cc varchar(50)=@codigo Select codigo, nombre from alptabla where master = " +
+                                "(select codigo from alptabla where nomtag = 'IA_MODELO')" +
+                                "and(codigo like  @cc or nombre like @cc); ";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -82,30 +64,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 using SqlCommand cmd = new SqlCommand(Sentencia, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", codigo));
-                adapter.Fill(dt);
-            }
-            if (dt == null)
-            {
-                return NotFound("");
-            }
-            return Ok(dt);
-        }
-
-        [HttpGet]
-        [Route("ModeloGen")]
-        public ActionResult<DataTable> ModeloGen()
-        {
-            string Sentencia = "Select codigo,nombre from alptabla where master=" +
-                               "(select codigo from alptabla where nomtag='IA_MODELO')";
-
-            DataTable dt = new DataTable();
-            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
-            {
-                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.SelectCommand.CommandType = CommandType.Text;
-               // adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", codigo));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", "%" + codigo + "%"));
                 adapter.Fill(dt);
             }
             if (dt == null)
@@ -138,35 +97,18 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
         }
 
-        [HttpGet]
-        [Route("MarcaGen")]
-        public ActionResult<DataTable> MarcaGen()
-        {
-            string Sentencia = "Select codigo,nombre from alptabla where master=" +
-                               "(select codigo from alptabla where nomtag='IA_MARCA')";
-
-            DataTable dt = new DataTable();
-            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
-            {
-                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.SelectCommand.CommandType = CommandType.Text;
-                // adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", codigo));
-                adapter.Fill(dt);
-            }
-            if (dt == null)
-            {
-                return NotFound("");
-            }
-            return Ok(dt);
-        }
+     
 
         [HttpGet]
         [Route("ACTCIU/{codigo}")]
         public ActionResult<DataTable> ACTCIU([FromRoute] string codigo)
         {
-            string Sentencia = "Select codigo,nombre from alptabla where master=" +
-                               "(select codigo from alptabla where nomtag='ACTCIU') and codigo=@codigo";
+            //string Sentencia = "Select codigo,nombre from alptabla where master=" +
+            //                   "(select codigo from alptabla where nomtag='ACTCIU') and codigo=@codigo";
+
+            string Sentencia = "declare @cc varchar(50)=@codigo Select codigo, nombre from alptabla where master = " +
+                                "(select codigo from alptabla where nomtag = 'ACTCIU')" +
+                                "and(codigo like  @cc or nombre like @cc); ";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -174,7 +116,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 using SqlCommand cmd = new SqlCommand(Sentencia, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", codigo));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", "%" + codigo + "%"));
                 adapter.Fill(dt);
             }
 
@@ -186,8 +128,8 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         }
 
         [HttpGet]
-        [Route("CiudadGen/{codigo}")]
-        public ActionResult<DataTable> CiudadGen([FromRoute] string codigo)
+        [Route("CiudadGen")]
+        public ActionResult<DataTable> CiudadGen()
         {
             string Sentencia = "Select codigo,nombre from alptabla where master=" +
                                "(select codigo from alptabla where nomtag='ACTCIU')";
@@ -198,7 +140,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 using SqlCommand cmd = new SqlCommand(Sentencia, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", codigo));
+                // adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", codigo));
                 adapter.Fill(dt);
             }
 
@@ -231,17 +173,16 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             {
                 return NotFound("");
             }
-
             return Ok(dt);
-
         }
 
         [HttpGet]
-        [Route("DPTOSGen")]
-        public ActionResult<DataTable> DPTOSGen()
+        [Route("custodio/{codigo}")]
+        public ActionResult<DataTable> custodio([FromRoute] string codigo)
         {
-            string Sentencia = "Select codigo,nombre from alptabla where master=" +
-                               "(select codigo from alptabla where nomtag='DPTOS')";
+            string Sentencia = "declare @ac varchar(200) = @codigo " +
+                                "select codigo, apellido, nombre, FECCREA, USUCREA, CIUDAD, DPTO, FECMODI  from dp12a110 where " +
+                                "CODIGO like @ac or APELLIDO like @ac or NOMBRE like @ac";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -249,7 +190,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 using SqlCommand cmd = new SqlCommand(Sentencia, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
-                // adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", codigo));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", "%" + codigo + "%"));
                 adapter.Fill(dt);
             }
 
@@ -261,7 +202,31 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
 
         }
+        
+        [HttpGet]
+        [Route("cuentas/{codigo}")]
+        public ActionResult<DataTable> cuentas([FromRoute] string codigo)
+        {
+            string Sentencia = "select codigo_aux codigo,nombre from DP01A110 where detalle = 1 or nombre like @codigo order by codigo_aux";
 
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", "%" + codigo + "%"));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+
+            return Ok(dt);
+
+        }
 
 
 
