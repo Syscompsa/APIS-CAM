@@ -181,9 +181,8 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         public ActionResult<DataTable> custodio([FromRoute] string codigo)
         {
             string Sentencia = "declare @ac varchar(200) = @codigo " +
-                                "select codigo, apellido, nombre, FECCREA, USUCREA, CIUDAD, DPTO, FECMODI  from dp12a110 where " +
-                                "CODIGO like @ac or APELLIDO like @ac or NOMBRE like @ac";
-
+                               "select codigo, apellido, nombre, FECCREA, USUCREA, CIUDAD, DPTO, FECMODI  from dp12a110 where " +
+                               "CODIGO like @ac or APELLIDO like @ac or NOMBRE like @ac";
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
@@ -193,14 +192,11 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", "%" + codigo + "%"));
                 adapter.Fill(dt);
             }
-
             if (dt == null)
             {
                 return NotFound("");
             }
-
             return Ok(dt);
-
         }
         
         [HttpGet]
