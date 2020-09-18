@@ -34,7 +34,7 @@ namespace WebApplicationSyscompsa
            //                 "Initial Catalog = CIA01-Web; Persist Security Info = True;" +
            //                 "User ID = AkaliServer90_SQLLogin_1; Password = cveb2x36w4;"
            // var connectionB = "Server=tcp:negfar.database.windows.net,1433;Initial Catalog=NegFarBd;Persist Security Info=False;User ID=NegFar;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-           var connectionB = @"Data Source = syswebservice\SQLEXPRESS01; Initial Catalog = GENFAR; Persist Security Info = True; User ID = sa; Password = Rootpass1";
+           var connectionB = @"Data Source = syswebservice\SQLEXPRESS01; Initial Catalog = negfar; Persist Security Info = True; User ID = sa; Password = Rootpass1";
             
            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionB));
            services.AddControllersWithViews().AddNewtonsoftJson(options =>

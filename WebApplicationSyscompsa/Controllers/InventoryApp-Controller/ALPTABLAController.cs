@@ -97,7 +97,31 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
         }
 
-     
+        [HttpGet]
+        [Route("MasterIA1/{cod}")]
+        public ActionResult<DataTable> MasterIA1([FromRoute] string cod)
+        {
+            string Sentencia = "declare @mod nvarchar(25) = @cod" +
+                               " select master, codigo, nombre from alptabla where master = 'IA1' and (codigo like @mod or nombre like @mod)";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@cod", "%" + cod + "%"));
+                adapter.Fill(dt);
+            }
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+            return Ok(dt);
+        }
+
+
+
 
         [HttpGet]
         [Route("ACTCIU/{codigo}")]
@@ -153,11 +177,12 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
 
 
         [HttpGet]
-        [Route("DPTOS/{codigo}")]
-        public ActionResult<DataTable> DPTOS([FromRoute] string codigo)
+        [Route("DPTOS/{dept}")]
+        public ActionResult<DataTable> DPTOS([FromRoute] string dept)
         {
-            string Sentencia = "Select codigo,nombre from alptabla where master=" +
-                               "(select codigo from alptabla where nomtag='DPTOS') and codigo=@codigo";
+            string Sentencia =  "declare @dep nvarchar(25) = @depart "+
+                                " select master, codigo, nombre from alptabla where master = '008'" +
+                                " and(codigo like @dep or nombre like @dep)";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -165,7 +190,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 using SqlCommand cmd = new SqlCommand(Sentencia, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", codigo));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@depart", "%" + dept + "%"));
                 adapter.Fill(dt);
             }
 

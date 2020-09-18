@@ -22,6 +22,8 @@ namespace WebApplicationSyscompsa.Models
         public DbSet<Interface_activoFijo> Interface_activoFijo { get; set; }
         public DbSet<ALPTABLA> ALPTABLA { get; set; }
         public DbSet<DP12A110> DP12A110 { get; set; }
+        public DbSet<reporteInv> reporteInv { get; set; }
+        public DbSet<dp11a110> dp11a110 { get; set; }
 
 
     }
