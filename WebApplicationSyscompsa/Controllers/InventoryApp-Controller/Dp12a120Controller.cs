@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -168,157 +170,42 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
         }
 
-        //[HttpGet]
-        //[Route("UpadteProdPlaca/{placa}/{clase}/{nombre}/{custodio}/{dpto}/{ciudad}/{serie}/" +
-        //    "{valor}/{activo}/{refer}/{fecrea}/{usucrea}/{fecmodi}/{usumodi}/{fecfin}/{horafin}/" +
-        //    "{userfin}/{barra}/{grupo}/{marca}/{color}/{fechac}/{proveedor}/{vidautil}/{valres}/{valor2}/" +
-        //    "{fechaa}/{fcustodio}/{cgasto}/{cdan}/{cdar}/{val_normal}/{val_reval}/{imagen}/{valor_resi}/" +
-        //    "{valor_res2}/{xxx}/{placa_aux}/{imagenbit}")]
-        //public ActionResult<DataTable> UpadteProdPlaca(
-        //    [FromRoute] string placa,
-        //    [FromRoute] string clase        ,
-        //    [FromRoute] string nombre       ,
-        //    [FromRoute] string custodio     ,
-        //    [FromRoute] string dpto         ,
-        //    [FromRoute] string ciudad       ,
-        //    [FromRoute] string serie        ,
-        //    [FromRoute] decimal valor        ,
-        //    [FromRoute] string activo       ,
-        //    [FromRoute] string refer        ,
-        //    [FromRoute] DateTime? fecrea       ,
-        //    [FromRoute] string usucrea      ,
-        //    [FromRoute] DateTime? fecmodi      ,
-        //    [FromRoute] string usumodi      ,
-        //    [FromRoute] DateTime? fecfin       ,
-        //    [FromRoute] DateTime? horafin      ,
-        //    [FromRoute] string userfin      ,
-        //    [FromRoute] string barra        ,
-        //    [FromRoute] string grupo        ,
-        //    [FromRoute] string marca        ,
-        //    [FromRoute] string color        ,
-        //    [FromRoute] DateTime? fechac       ,
-        //    [FromRoute] string proveedor     ,
-        //    [FromRoute] decimal vidautil     ,
-        //    [FromRoute] decimal valres       ,
-        //    [FromRoute] decimal valor2       ,
-        //    [FromRoute] DateTime? fechaa     ,
-        //    [FromRoute] DateTime? fcustodio ,
-        //    [FromRoute] string cgasto       ,
-        //    [FromRoute] string cdan         ,
-        //    [FromRoute] string cdar         ,
-        //    [FromRoute] decimal val_normal     ,
-        //    [FromRoute] decimal val_reval     ,
-        //    [FromRoute] string imagen       ,
-        //    [FromRoute] decimal valor_resi,
-        //    [FromRoute] decimal valor_res2     ,
-        //    [FromRoute] decimal xxx          ,
-        //    [FromRoute] string placa_aux     ,
-        //    [FromRoute] string imagenbit     
+        [HttpPost, DisableRequestSizeLimit]
+        [Route("Upload")]
+        public IActionResult Upload()
+        {
+            try
+            {
+                var file = Request.Form.Files[0];
+                var folderName = Path.Combine("Resources", "Users");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
-        //    )
-        //{
-        //    string Sentencia = "UPDATE [dbo].[DP12A120]"+
-        //                        "SET PLACA = @placa"+
-        //                        ", CLASE = @clase"+
-        //                        ",[NOMBRE] = @nombre"+
-        //                        ",[CUSTODIO] = @custodio"+
-        //                        ",[DPTO] = @dpto     "+
-        //                        ",[CIUDAD] = @ciudad   "+
-        //                        ",[SERIE] = @serie    "+
-        //                        ",[VALOR] = @valor     "+
-        //                        ",[ACTIVO] = @activo   "+
-        //                        ",[REFER] = @refer    "+
-        //                        ",[FECCREA] = @fecrea  "+
-        //                        ",[USUCREA] = @usucrea  "+
-        //                        ",[FECMODI] = @fecmodi  "+
-        //                        ",[USUMODI] = @usumodi  "+
-        //                        ",[FECFIN] = @fecfin   "+
-        //                        ",[HORAFIN] = @horafin"+
-        //                        ",[USERFIN] = @userfin  "+
-        //                        ",[BARRA] = @barra    "+
-        //                        ",[GRUPO] = @grupo    "+
-        //                        ",[MARCA] = @marca    "+
-        //                        ",[COLOR] = @color    "+
-        //                        ",[FECHAC] = @fechac   "+
-        //                        ",[PROVEEDOR] = @proveedor "+
-        //                        ",[MODELO] = @modelo   "+
-        //                        ",[VIDAUTIL] = @vidautil  "+
-        //                        ",[VALRES] = @valres    "+
-        //                        ",[VALOR2] = @valor2    "+
-        //                        ",[FECHAA] = @fechaa    "+
-        //                        ",[FCUSTODIO] = @fcustodio "+
-        //                        ",[CGASTO] = @cgasto   "+
-        //                        ",[CDAN] = @cdan     "+
-        //                        ",[CDAR] = @cdar     "+
-        //                        ",[VAL_NORMAL] = @val_normal "+
-        //                        ",[VAL_REVAL] = @val_reval "+
-        //                        ",[IMAGEN] = @imagen"+
-        //                        ",[VALOR_RESI] = @valor_resi"+
-        //                        ",[VALOR_RES2] = @valor_res2"+
-        //                        ",[xxx] = @xxx"+
-        //                        ",[placa_aux] = @placa_aux"+
-        //                        ",[IMAGENBIT] = @imagenbit"+
-        //                        "WHERE[PLACA] = @placa";
+                if (file.Length > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue
+                        .Parse(file.ContentDisposition)
+                        .FileName.Trim('"');
+                    var fullPath = Path.Combine(pathToSave, fileName);
+                    var dbPath = Path.Combine(folderName, fileName);
 
-        //    DataTable dt = new DataTable();
-        //    using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
-        //    {
-        //        using SqlCommand cmd = new SqlCommand(Sentencia, connection);
-        //        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-        //        adapter.SelectCommand.CommandType = CommandType.Text;
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@placa",         placa       ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@clase",         clase       ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@nombre",        nombre      ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@custodio",      custodio    ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@dpto",          dpto        ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@ciudad",        ciudad      ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@serie",         serie       ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@valor",         valor       ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@activo",        activo      ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@refer",         refer       ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@fecrea",        fecrea      ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@usucrea",       usucrea     ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@fecmodi",       fecmodi     ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@usumodi",       usumodi     ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@fecfin",        fecfin      ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@horafin",       horafin     ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@userfin" ,      userfin     ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@barra"   ,      barra       ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@grupo"   ,      grupo       ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@marca"   ,      marca       ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@color"   ,      color       ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@fechac"  ,      fechac      ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@proveedor",     proveedor   ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@vidautil" ,     vidautil    ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@valres"   ,     valres      ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@valor2"   ,     valor2      ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@fechaa"   ,     fechaa      ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@fcustodio",     fcustodio   ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@cgasto"   ,     cgasto      ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@cdan"     ,     cdan        ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@cdar"     ,     cdar        ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@val_normal",    val_normal  ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@val_reval" ,    val_reval   ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@imagen"    ,    imagen      ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@valor_resi",    valor_resi  ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@valor_res2",    valor_res2  ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@xxx"       ,    xxx         ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@placa_aux" ,    placa_aux   ));
-        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@imagenbit" ,    imagenbit   ));
-        //        adapter.Fill(dt);
-        //    }
-        //    if (dt == null)
-        //    {
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
 
-        //        return NotFound("");
+                    return Ok(new { dbPath });
+                }
+                else
 
-        //    }
-
-
-
-        //    return Ok(dt);
-
-        //}
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
 
         [HttpGet]
         [Route("getPlaca/{placa}")]

@@ -184,6 +184,8 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                                 " select master, codigo, nombre from alptabla where master = '008'" +
                                 " and(codigo like @dep or nombre like @dep)";
 
+
+
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
@@ -200,6 +202,8 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             }
             return Ok(dt);
         }
+
+
 
         [HttpGet]
         [Route("custodio/{codigo}")]
