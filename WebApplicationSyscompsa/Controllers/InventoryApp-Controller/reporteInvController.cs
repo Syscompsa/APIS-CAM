@@ -185,5 +185,64 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
         }
 
+
+        [HttpGet]
+        [Route("GetReporteGenByParam/{farmacia}")]
+        public ActionResult<DataTable> GetReporteGenByParam([FromRoute] string farmacia)
+        {
+
+            string Sentencia = "select * from reporteInv where CampoA like  @farm ";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@farm", "%" + farmacia + "%"));
+                adapter.Fill(dt);
+            }
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+            return Ok(dt);
+        }
+
+        [HttpGet]
+        [Route("GetRepByCiud/{farmacia}/{ciud}")]
+        public ActionResult<DataTable> GetRepByCiud([FromRoute] string farmacia, [FromRoute] string ciud)
+        {
+            
+
+            string Sentencia =
+            "declare @farm nvarchar(20) = @farma, " +
+            " @ciudad nvarchar(20) = @ciud " + 
+            " select a.*,ciu.nombre ciudad, dep.nombre departamento " +
+            " from dp12a110 a " +
+            " left " + 
+            " join (select codigo,nombre from alptabla with(nolock) where master= (select codigo from alptabla with(nolock) where nomtag= 'ACTCIU')) ciu on ciu.codigo = a.ciudad " +
+            " left join(select codigo, nombre from alptabla with(nolock) where master= (select codigo from alptabla with(nolock) where nomtag= 'DPTOS')) dep on dep.codigo = a.DPTO " +
+            " where (len(@farm) = 0 or dep.nombre like @farm) " +
+            " and(len(@ciudad) = 0 or ciu.nombre like @ciudad) " ;
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+               
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@farma", "%" + farmacia + "%"));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@ciud", "%" + ciud + "%"));
+                adapter.Fill(dt);
+            }
+            if (dt == null)
+            {
+                return NotFound("No se  ha encontrado la peticion");
+            }
+            return Ok(dt);
+        }
+
     }
 }
