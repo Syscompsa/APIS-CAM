@@ -255,7 +255,6 @@ C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Release\netcoreapp3.
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Release\netcoreapp3.1\WebApplicationSyscompsa.csprojAssemblyReference.cache
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Release\netcoreapp3.1\staticwebassets\WebApplicationSyscompsa.StaticWebAssets.Manifest.cache
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Release\netcoreapp3.1\staticwebassets\WebApplicationSyscompsa.StaticWebAssets.xml
-C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Release\netcoreapp3.1\WebApplicationSyscompsa.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Release\netcoreapp3.1\WebApplicationSyscompsa.AssemblyInfoInputs.cache
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Release\netcoreapp3.1\WebApplicationSyscompsa.AssemblyInfo.cs
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Release\netcoreapp3.1\WebApplicationSyscompsa.RazorTargetAssemblyInfo.cache
@@ -394,3 +393,14 @@ C:\Users\tct\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Release\netcoreapp3.1\
 C:\Users\tct\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Release\netcoreapp3.1\WebApplicationSyscompsa.csproj.CopyComplete
 C:\Users\tct\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Release\netcoreapp3.1\WebApplicationSyscompsa.dll
 C:\Users\tct\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Release\netcoreapp3.1\WebApplicationSyscompsa.pdb
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Release\netcoreapp3.1\Magick.NET.Core.dll
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Release\netcoreapp3.1\runtimes\linux-x64\native\Magick.Native-Q16-x64.dll.so
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Release\netcoreapp3.1\runtimes\osx-x64\native\Magick.Native-Q16-x64.dll.dylib
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Release\netcoreapp3.1\runtimes\win-x64\native\Magick.Native-Q16-x64.dll
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Release\netcoreapp3.1\Magick.NET-Q16-x64.dll
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Release\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Release\netcoreapp3.1\System.Drawing.Common.dll
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Release\netcoreapp3.1\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Release\netcoreapp3.1\WebApplicationSyscompsa.MvcApplicationPartsAssemblyInfo.cache

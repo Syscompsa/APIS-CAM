@@ -23,7 +23,7 @@ namespace WebApplicationSyscompsa.Models.InventoryApp
       public DateTime? FECMODI  { get; set; }
       public string USUMODI     { get; set; }
       public DateTime? FECFIN   { get; set; }
-      public string HORAFIN     { get; set; }
+      public DateTime? HORAFIN     { get; set; }
       public string USERFIN     { get; set; }
       public string BARRA       { get; set; }
       public string GRUPO       { get; set; }
@@ -47,6 +47,6 @@ namespace WebApplicationSyscompsa.Models.InventoryApp
       public decimal VALOR_RES2 { get; set; }
       public string placa_aux   { get; set; }
       public string IMAGENBIT   { get; set; }
-      public char af_control    { get; set; }
+      public Boolean af_control    { get; set; }
     }
 }

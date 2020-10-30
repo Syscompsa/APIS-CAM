@@ -28,14 +28,15 @@ namespace WebApplicationSyscompsa
         {            
             services.AddControllers();
 
-           //var connectionB = @"Data Source = 181.196.189.58,59925\\SQLEXPRESS; Initial Catalog = SQLOSTRATEK; Persist Security Info = True; User ID = sa; Password = Rootpass1";
+           // var connectionB = @"Data Source = 181.196.189.58,59925\\SQLEXPRESS; Initial Catalog = SQLOSTRATEK; Persist Security Info = True; User ID = sa; Password = Rootpass1";
            // var connectionB = @"Data Source = JOSE\SQLEXPRESS; Initial Catalog = CIA01; Persist Security Info = True; User ID = sa; Password = a";
-           //var connectionB = @"Data Source = CIA01-Web.mssql.somee.com;" +
+           // var connectionB = @"Data Source = CIA01-Web.mssql.somee.com;" +
            //                 "Initial Catalog = CIA01-Web; Persist Security Info = True;" +
            //                 "User ID = AkaliServer90_SQLLogin_1; Password = cveb2x36w4;"
            // var connectionB = "Server=tcp:negfar.database.windows.net,1433;Initial Catalog=NegFarBd;Persist Security Info=False;User ID=NegFar;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
            var connectionB = @"Data Source = syswebservice\SQLEXPRESS01; Initial Catalog = negfar; Persist Security Info = True; User ID = sa; Password = Rootpass1";
-            
+           // var connectionB = @"Data Source = guty\SQLEXPRESS; Initial Catalog = WINEDTECH; Persist Security Info = True; User ID = sa; Password = a";
+           
            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionB));
            services.AddControllersWithViews().AddNewtonsoftJson(options =>
            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);            
@@ -45,7 +46,9 @@ namespace WebApplicationSyscompsa
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost:58726", "https://www.alp-cloud.com/", "")
+            // app.UseCors(builder => builder.WithOrigins("http://localhost:58726", "https://www.alp-cloud.com/", "")
+            app.UseCors(builder => builder.WithOrigins("http://localhost:5000/", "https://www.alp-cloud.com/", "")
+            //app.UseCors(builder => builder.WithOrigins("http://localhost:5000/", "https://www.alp-cloud.com:8446", "")
             .AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             if (env.IsDevelopment())

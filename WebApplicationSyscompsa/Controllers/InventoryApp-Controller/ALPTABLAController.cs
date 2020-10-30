@@ -102,7 +102,8 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         public ActionResult<DataTable> MasterIA1([FromRoute] string cod)
         {
             string Sentencia = "declare @mod nvarchar(25) = @cod" +
-                               " select master, codigo, nombre from alptabla where master = 'IA1' and (codigo like @mod or nombre like @mod)";
+                               " select master, codigo, nombre from alptabla where master = 'IA1'"
+                               +" and (codigo like @mod or nombre like @mod)";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -209,9 +210,16 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("custodio/{codigo}")]
         public ActionResult<DataTable> custodio([FromRoute] string codigo)
         {
+            //string Sentencia = "declare @ac varchar(200) = @codigo " +
+            //                   "select codigo, apellido, nombre, FECCREA, USUCREA, CIUDAD, DPTO, FECMODI  from dp12a110 where " +
+            //                   "CODIGO like @ac or APELLIDO like @ac or NOMBRE like @ac";
+
             string Sentencia = "declare @ac varchar(200) = @codigo " +
-                               "select codigo, apellido, nombre, FECCREA, USUCREA, CIUDAD, DPTO, FECMODI  from dp12a110 where " +
-                               "CODIGO like @ac or APELLIDO like @ac or NOMBRE like @ac";
+                            " select a.codigo, a.apellido, a.nombre, a.CIUDAD, a.DPTO, b.nombre from dp12a110 a " +
+                            " left join ALPTABLA b  on b.master = '008' and a.DPTO = b.codigo " +
+                            " where a.CODIGO like @ac or a.APELLIDO like @ac or a.NOMBRE like @ac" +
+                            " or b.nombre like @ac or a.DPTO like @ac";
+
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
@@ -227,7 +235,31 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             }
             return Ok(dt);
         }
-        
+
+
+        [HttpGet]
+        [Route("RealClases/{codigo}")]
+        public ActionResult<DataTable> RealClases([FromRoute] string codigo)
+        {
+            string Sentencia = "execute df_pLAN_aCTIVOS @codigo";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo", "%" + codigo + "%"));
+                adapter.Fill(dt);
+            }
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+            return Ok(dt);
+        }
+
+
         [HttpGet]
         [Route("cuentas/{codigo}")]
         public ActionResult<DataTable> cuentas([FromRoute] string codigo)

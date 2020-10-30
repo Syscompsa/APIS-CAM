@@ -49,6 +49,32 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         }
 
         [HttpGet]
+        [Route("getDataReportIng/{param}")]
+        public ActionResult<DataTable> getDataReportIng([FromRoute] string param )
+        {
+            string Sentencia = " select a.custodio, a.placa, a.nombre, " +
+                               " a.dpto, a.ciudad, a.FECCREA, b.APELLIDO, " +
+                               " b.nombre nomcust, d.nombre nomciudad from dp12a120 a " +
+                               " left join DP12A110 b on b.CODIGO = a.CUSTODIO " +
+                               " left join alptabla d on master = '007' and a.CIUDAD = d.codigo " +
+                               " order by id @param";
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@param", param));
+                adapter.Fill(dt);
+            }
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+            return Ok(dt);
+        }
+
+        [HttpGet]
         [Route("getQRGen")]
         public ActionResult<DataTable> GetQRGen()
         {
@@ -94,6 +120,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("ProductoSave")]
         public async Task<IActionResult> CanvaSave([FromBody] Dp12a120 model)
         {
+            string img = model.IMAGENBIT;
 
             if (ModelState.IsValid)
             {

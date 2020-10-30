@@ -22,6 +22,39 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         {
             this._context = context;
         }
+
+        [HttpGet]
+        [Route("getReporteByParam/{param}")]
+        public ActionResult<DataTable> getReporteByParam([FromRoute] string param)
+        {
+            string Sentencia = "declare @search nvarchar(50) = @para " +
+                               " select a.Id, a.FechaInv, a.PlacaInv ,a.DescripInv, a.Custodio, a.Ciudad, a.CampoA, b.codigo, " +
+                               " b.nombre farmacia, c.APELLIDO, c.NOMBRE from reporteInv a " +
+                               " left join alptabla b on b.master = '008' and b.codigo = a.CampoA " +
+                               " left join DP12A110 c on c.CODIGO = a.Custodio " +
+                               " where(len(@search) = 0 or c.NOMBRE like @search " +
+                               " or c.APELLIDO like @search or b.nombre like @search " +
+                               " or CAST(a.FechaInv as date) like @search)";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(Sentencia, connection))
+                {
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.SelectCommand.CommandType = CommandType.Text;
+                    adapter.SelectCommand.Parameters.Add(new SqlParameter("@para", "%"+ param + "%"));
+                    adapter.Fill(dt);
+                }
+            }
+
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+            return Ok(dt);
+        }
+
         [HttpGet]
         [Route("getReporte")]
         public ActionResult<DataTable> getReporte()
@@ -94,16 +127,21 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         public ActionResult<DataTable> GetDptoReporte([FromRoute] string master)
         {
 
-            string Sentencia = " declare @Departamento nvarchar(20) = @m " +
-                               " select a.dpto, b.nombre nomDpto, a.CIUDAD, c.nombre nomCiudad, " +
+            string Sentencia = " declare @Departamento nvarchar(20) = '%%' " +
+                               " select a.id, a.placa, a.NOMBRE,a.dpto, b.nombre nomDpto, a.CIUDAD, c.nombre nomCiudad, " +
                                " a.MARCA, d.nombre nomMarca, a.CUSTODIO, RTRIM(e.NOMBRE) + ' ' + " +
                                " RTRIM(e.APELLIDO) nombreCustodio ,  a.* " +
                                " from DP12A120 a " +
-                               " left join alptabla b on b.master = '008' and b.codigo = a.dpto " +
+                               " left " +
+                               " join alptabla b on b.master = '008' and b.codigo = a.dpto " +
                                " left join alptabla c on c.master = '007' and c.codigo = a.CIUDAD " +
                                " left join ALPTABLA d on d.master = 'IA1' and d.codigo = a.MARCA " +
                                " left join DP12A110 e on e.codigo = a.CUSTODIO " +
-                               " where(len(@Departamento) = 0 or a.dpto like @Departamento or b.nombre like @Departamento)  " ;
+                               " where(len(@Departamento) = 0 " +
+                               " or a.dpto like @Departamento " +
+                               " or b.nombre like @Departamento " +
+                               " or e.NOMBRE like @Departamento " +
+                               " or e.APELLIDO like @Departamento)";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -125,11 +163,10 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("GetMarcaReporte/{master}")]
         public ActionResult<DataTable> GetMarcaReporte([FromRoute] string master)
         {
-
             string Sentencia = " declare @Marca nvarchar(20) = @m " +
-                               " select a.dpto, b.nombre nomDpto, a.CIUDAD, c.nombre nomCiudad, " +
+                               " select a.id, a.placa, a.NOMBRE,a.dpto, b.nombre nomDpto, a.CIUDAD, c.nombre nomCiudad, " +
                                " a.MARCA, d.nombre nomMarca, a.CUSTODIO, RTRIM(e.NOMBRE) + ' ' + " +
-                               " RTRIM(e.APELLIDO) nombreCustodio ,  a.* " +
+                               " RTRIM(e.APELLIDO) nombreCustodio " +
                                " from DP12A120 a " +
                                " left join alptabla b on b.master = '008' and b.codigo = a.dpto " +
                                " left join alptabla c on c.master = '007' and c.codigo = a.CIUDAD " +
@@ -159,15 +196,16 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         {
 
             string Sentencia = " declare @NomCust nvarchar(20) = @m " +
-                               " select a.dpto, b.nombre nomDpto, a.CIUDAD, c.nombre nomCiudad, " +
+                               " select a.id, a.placa, a.NOMBRE,a.dpto, b.nombre nomDpto, a.CIUDAD, c.nombre nomCiudad, " +
                                " a.MARCA, d.nombre nomMarca, a.CUSTODIO, RTRIM(e.NOMBRE) + ' ' + " +
-                               " RTRIM(e.APELLIDO) nombreCustodio ,  a.* " +
+                               " RTRIM(e.APELLIDO) nombreCustodio " +
                                " from DP12A120 a " +
                                " left join alptabla b on b.master = '008' and b.codigo = a.dpto " +
                                " left join alptabla c on c.master = '007' and c.codigo = a.CIUDAD " +
                                " left join ALPTABLA d on d.master = 'IA1' and d.codigo = a.MARCA " +
                                " left join DP12A110 e on e.codigo = a.CUSTODIO " +
-                               " where (len(@NomCust)=0 or e.APELLIDO like @NomCust or e.NOMBRE like @NomCust) ";
+                               " where(len(@NomCust) = 0 or e.APELLIDO like @NomCust or " +
+                               " e.NOMBRE like @NomCust or e.DPTO like @NomCust)";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))

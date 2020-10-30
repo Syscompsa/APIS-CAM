@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplicationSyscompsa.Models.carshop;
 using WebApplicationSyscompsa.Models.InventoryApp;
 
 namespace WebApplicationSyscompsa.Models
@@ -24,6 +25,10 @@ namespace WebApplicationSyscompsa.Models
         public DbSet<DP12A110> DP12A110 { get; set; }
         public DbSet<reporteInv> reporteInv { get; set; }
         public DbSet<dp11a110> dp11a110 { get; set; }
+        public DbSet<DP03A110> DP03A110 { get; set; }
+        public DbSet<DP03ASAL> DP03ASAL { get; set; }
+        public DbSet<PrintHist> PrintHist { get; set; }
+        public DbSet<AppConfig> AppConfig { get; set; }
 
 
     }
