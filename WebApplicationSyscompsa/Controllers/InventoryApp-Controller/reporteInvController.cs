@@ -28,7 +28,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         public ActionResult<DataTable> getReporteByParam([FromRoute] string param)
         {
             string Sentencia = "declare @search nvarchar(50) = @para " +
-                               " select a.Id, a.FechaInv, a.PlacaInv ,a.DescripInv, a.Custodio, a.Ciudad, a.CampoA, b.codigo, " +
+                               " select a.Id, a.FechaInv, a.PlacaInv ,a.DescripInv, a.Custodio, a.Ciudad, a.CampoA, a.CampoB, b.codigo, " +
                                " b.nombre farmacia, c.APELLIDO, c.NOMBRE from reporteInv a " +
                                " left join alptabla b on b.master = '008' and b.codigo = a.CampoA " +
                                " left join DP12A110 c on c.CODIGO = a.Custodio " +
@@ -233,12 +233,12 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
-            {
+            {            
                 using SqlCommand cmd = new SqlCommand(Sentencia, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
                 adapter.SelectCommand.Parameters.Add(new SqlParameter("@farm", "%" + farmacia + "%"));
-                adapter.Fill(dt);
+                adapter.Fill(dt);            
             }
             if (dt == null)
             {

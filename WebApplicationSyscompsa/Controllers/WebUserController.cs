@@ -33,7 +33,7 @@ namespace WebApplicationSyscompsa.Controllers
         public ActionResult<DataTable> getReporteByParam([FromRoute] string User)
         {
             string Sentencia = "declare @us nvarchar(20) = @User " +
-                               " select* from WebUser where WebUsu = @us ";
+                               " select * from WebUser where WebUsu = @us ";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -61,7 +61,6 @@ namespace WebApplicationSyscompsa.Controllers
             var result = await _context.WebUser.FirstOrDefaultAsync(x =>
                          x.WebUsu == userInfo.WebUsu
                          && x.WebPass == userInfo.WebPass );
-
             if (result != null)
             {
                 return Ok(result);

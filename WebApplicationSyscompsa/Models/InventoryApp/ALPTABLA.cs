@@ -7,8 +7,8 @@ namespace WebApplicationSyscompsa.Models.InventoryApp
 {
     public class ALPTABLA
     {
-      public int Id { get; set; }
-      public char Mmaster       {get; set;}
+      public int Id             {get; set;}
+      public char Master        {get; set;}
       public char Codigo        {get; set;}
       public string Nombre      {get; set;}
       public decimal Valor      {get; set;}
@@ -21,6 +21,7 @@ namespace WebApplicationSyscompsa.Models.InventoryApp
       public string Campo2      {get; set;}
       public decimal Lencod     {get; set;}
       public decimal VALOR2     {get; set;}
+      public Boolean FLAG_VALUE {get; set;}
 
     }               
 }

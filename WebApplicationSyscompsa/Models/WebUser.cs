@@ -7,11 +7,9 @@ namespace WebApplicationSyscompsa.Models
 {
     public class WebUser
     {
-        public int Id { get; set; }
-        public string WebUsu { get; set; }
-        public string WebPass { get; set; }
-        public string TipoMu { get; set; }
-        public string Token { get; set;  }
-        public string Perfil { get; set; }
+        public int Id               { get; set; }
+        public string WebUsu        { get; set; }
+        public string WebPass       { get; set; }
+        public string TipoMu        { get; set; }
     }
 }

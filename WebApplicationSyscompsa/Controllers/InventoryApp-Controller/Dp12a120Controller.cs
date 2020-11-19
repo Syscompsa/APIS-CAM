@@ -45,19 +45,21 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             {
                 return NotFound("");
             }
-            return Ok("Producto eliminado con éxito");
+            return Ok(dt);
         }
 
         [HttpGet]
         [Route("getDataReportIng/{param}")]
-        public ActionResult<DataTable> getDataReportIng([FromRoute] string param )
+        public ActionResult<DataTable> getDataReportIng([FromRoute] int param )
         {
-            string Sentencia = " select a.custodio, a.placa, a.nombre, " +
-                               " a.dpto, a.ciudad, a.FECCREA, b.APELLIDO, " +
-                               " b.nombre nomcust, d.nombre nomciudad from dp12a120 a " +
-                               " left join DP12A110 b on b.CODIGO = a.CUSTODIO " +
-                               " left join alptabla d on master = '007' and a.CIUDAD = d.codigo " +
-                               " order by id @param";
+            string Sentencia = " declare @par int = @param " +
+                                " select id, a.custodio, a.placa, a.nombre, " +
+                                " a.dpto, a.ciudad, a.FECCREA, b.APELLIDO, " +
+                                " b.nombre nomcust, d.nombre nomciudad from dp12a120 a " +
+                                " left join DP12A110 b on b.CODIGO = a.CUSTODIO " +
+                                " left join alptabla d on master = '007' and a.CIUDAD = d.codigo " +
+                                " order by (case @par when 1 then id else 0 end) desc, " +
+                                " 		   (case @par when 2 then id else 0 end) asc   ";
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
@@ -73,6 +75,28 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             }
             return Ok(dt);
         }
+
+        [HttpGet]
+        [Route("getDataImg/{placa}")]
+        public ActionResult<DataTable> getDataImg([FromRoute] string placa)
+        {
+            string Sentencia = " select IMAGENBIT, len(ltrim(rtrim(coalesce(IMAGENBIT, '')))) as Peso from dp12a120 where placa = @placa ";
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {                
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@placa", placa));
+                adapter.Fill(dt);
+            }
+            if (dt == null)
+            {
+                return NotFound("NO SE ENCONTRO DATA, PUEDE QUE TENGAS CONEXIÓN A INTERNET O ESTES ENVIANDO MAL LA VARIABLE");
+            }
+            return Ok(dt);
+        }
+
 
         [HttpGet]
         [Route("getQRGen")]
@@ -143,6 +167,8 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         public async Task<IActionResult> ProductUpdate([FromRoute] int Id,
                                                        [FromBody] Dp12a120 model)
         {
+            // string imagen = model.IMAGENBIT;
+
             if (Id != model.Id)
             {
                 return BadRequest();
@@ -264,7 +290,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("GetProduct")]
         public ActionResult<DataTable> GetProducts()
         {
-            string Sentencia = "select * from Placa_Post_Url order by Id desc";
+            string Sentencia = "select top(1)  * from Placa_Post_Url order by Id desc ";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -280,6 +306,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             {
                 return NotFound("");
             }
+
             // return Redirect("https://inventory-bb9fa.web.app");
             return Ok(dt);
 
