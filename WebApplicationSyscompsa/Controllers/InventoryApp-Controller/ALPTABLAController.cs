@@ -27,7 +27,8 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         {
             //actualmente solo hay un codigo asignado 001 = varios
             string Sentencia = "Select codigo,nombre from alptabla where master=" +
-                               "(select codigo from alptabla where nomtag='INVGRUPO') and codigo=@codigo";
+                               "(select codigo from alptabla where nomtag='INVGRUPO')" +
+                               " and codigo=@codigo";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -214,11 +215,11 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             //                   "select codigo, apellido, nombre, FECCREA, USUCREA, CIUDAD, DPTO, FECMODI  from dp12a110 where " +
             //                   "CODIGO like @ac or APELLIDO like @ac or NOMBRE like @ac";
 
-            string Sentencia = "declare @ac varchar(200) = @codigo " +
-                            " select a.codigo, a.apellido, a.nombre, a.CIUDAD, a.DPTO, b.nombre from dp12a110 a " +
-                            " left join ALPTABLA b  on b.master = '008' and a.DPTO = b.codigo " +
-                            " where a.CODIGO like @ac or a.APELLIDO like @ac or a.NOMBRE like @ac" +
-                            " or b.nombre like @ac or a.DPTO like @ac";
+            string Sentencia =  " declare @ac varchar(200) = @codigo " +
+                                " select a.codigo, a.apellido, a.nombre, a.CIUDAD, a.DPTO, b.nombre from dp12a110 a " +
+                                " left join ALPTABLA b  on b.master = '008' and a.DPTO = b.codigo " +
+                                " where a.CODIGO like @ac or a.APELLIDO like @ac or a.NOMBRE like @ac " +
+                                " or b.nombre like @ac or a.DPTO like @ac";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -235,6 +236,8 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             }
             return Ok(dt);
         }
+
+
 
 
         [HttpGet]
@@ -258,7 +261,83 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             }
             return Ok(dt);
         }
+        
+        [HttpGet]
+        [Route("GetUserByCod/{name}")]
+        public ActionResult<DataTable> GetUserByCod([FromRoute] string name)
+        {
+        
+            string Sentencia = " declare @nomCust nvarchar(50) = @nameCu " +
+                               " select LTRIM(RTRIM(b.NOMBRE +' ' + b.APELLIDO)) as nombreCustodio, a.Id, a.PLACA, " +
+                               " a.CLASE, a.NOMBRE, a.CUSTODIO, a.DPTO, d.nombre as nomDpto, a.CIUDAD," +
+                               " c.nombre as nomCiudad from dp12a120 as a " +
+                               " left join dp12a110 as b ON b.CODIGO = a.CUSTODIO " +
+                               " left join alptabla as c ON c.master = '007' and c.codigo = a.CIUDAD " +
+                               " left join alptabla as d ON d.master = '008' and d.codigo = a.DPTO " +
+                               " where b.NOMBRE like @nomCust ";
 
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString)) {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@nameCu", "%" + name + "%"));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null) {
+
+                return NotFound("");
+            
+            }
+
+            return Ok(dt);
+        
+        }
+               
+
+        [HttpGet]
+        [Route("GetInfoQuest/{codigo}/{controlImgS}")]
+        public ActionResult<DataTable> GetInfoQuest([FromRoute] string codigo, [FromRoute] string controlImgs)
+        {
+            string Sentencia = " declare @paramA nvarchar(10) = @codigo "                               +
+                               " declare @paramB nvarchar(10) = @controlImgs "                          +
+                               " select a.placa, a.CLASE, g.NOMBRE as NAMECLASS, "                      +
+                               " a.NOMBRE , a.CUSTODIO, RTRIM(e.NOMBRE) + ' ' + "                       +
+                               " RTRIM(e.APELLIDO) nombreCustodio, a.DPTO, "                            +
+                               " b.nombre as DEPTNAME, a.CIUDAD, c.nombre as NAMECIUD, SERIE ,REFER, "  +
+                               " a.USUCREA, a.USUMODI, USERFIN, a.GRUPO, f.nombre as NAMEGRUPO, "       +
+                               " a.MARCA, d.nombre as NAMEMARCA, a.COLOR, a.controlImg, "                +
+                               " PROVEEDOR, MODELO "                                                    +
+                               " from dp12a120 as a "                                                   +
+                               " left join ALPTABLA as b on master = '008' and b.codigo = a.DPTO "      +
+                               " left join alptabla c on c.master = '007' and c.codigo = a.CIUDAD "     +
+                               " left join ALPTABLA d on d.master = 'IA1' and d.codigo = a.MARCA "      +
+                               " left join DP12A110 e on e.codigo = a.CUSTODIO "                        +
+                               " left join dp11a110 f on f.grupo = a.GRUPO "                            +
+                               " left join dp12a140 g on g.CODIGO_AUX = a.CLASE "                       +
+                               " where a.dpto = @paramA and (len(@paramB)=0 or (len(@paramB)=1"         +
+                               " and controlImg = @paramB) or (len(@paramB)!=1 and a.PLACA=@paramB)) ";
+
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@codigo",  codigo ));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@controlImgs", controlImgs));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null) {
+                return NotFound("");
+            }
+
+            return Ok(dt);
+
+        }
 
         [HttpGet]
         [Route("cuentas/{codigo}")]

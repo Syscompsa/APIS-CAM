@@ -52,14 +52,14 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("getDataReportIng/{param}")]
         public ActionResult<DataTable> getDataReportIng([FromRoute] int param )
         {
-            string Sentencia = " declare @par int = @param " +
+            string Sentencia =  " declare @par int = @param "                 +
                                 " select id, a.custodio, a.placa, a.nombre, " +
-                                " a.dpto, a.ciudad, a.FECCREA, b.APELLIDO, " +
+                                " a.dpto, a.ciudad, a.FECCREA, b.APELLIDO, "  +
                                 " b.nombre nomcust, d.nombre nomciudad from dp12a120 a " +
-                                " left join DP12A110 b on b.CODIGO = a.CUSTODIO " +
+                                " left join DP12A110 b on b.CODIGO = a.CUSTODIO "        +
                                 " left join alptabla d on master = '007' and a.CIUDAD = d.codigo " +
-                                " order by (case @par when 1 then id else 0 end) desc, " +
-                                " 		   (case @par when 2 then id else 0 end) asc   ";
+                                " order by (case @par when 1 then id else 0 end) desc, "           +
+                                " 		   (case @par when 2 then id else 0 end) asc ";
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
@@ -76,14 +76,20 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
         }
 
+        //declare @plac nvarchar(50) = '0101032088'
+        //select placa, coalesce( imagenbit, '' ) as foto, len(ltrim(rtrim(coalesce(IMAGENBIT,''))))
+        //as Peso from dp12a120 where PLACA = @plac
         [HttpGet]
-        [Route("getDataImg/{placa}")]
+        [Route("getImgByPlaca/{placa}")]
         public ActionResult<DataTable> getDataImg([FromRoute] string placa)
         {
-            string Sentencia = " select IMAGENBIT, len(ltrim(rtrim(coalesce(IMAGENBIT, '')))) as Peso from dp12a120 where placa = @placa ";
+            string Sentencia =         "declare @plac nvarchar(50) = @placa " + 
+                                       " select placa, coalesce(imagenbit, '') as foto," +
+                                       " len(ltrim(rtrim(coalesce(IMAGENBIT, '')))) " +
+                                       " as Peso from dp12a120 where PLACA = @plac ";
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
-            {                
+            {
                 using SqlCommand cmd = new SqlCommand(Sentencia, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
@@ -96,6 +102,77 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             }
             return Ok(dt);
         }
+
+        [HttpGet]
+        [Route("getDataImgFilter/{fotoCodecA}/{fotoCodecB}/{departamento}")]
+        public ActionResult<DataTable> getDataImgFilter([FromRoute] string departamento, [FromRoute] string fotoCodecA, [FromRoute] string fotoCodecB)
+
+
+
+        {
+            string Sentencia =  " declare @BotonCI bit = @fotoCodecA, "           +
+                                " @BotonSI bit = @fotoCodecB select placa, DPTO," +
+                                " len(ltrim(rtrim(coalesce(IMAGENBIT, '')))) "    +
+                                " as Peso from dp12a120 where (@BotonCI = 0 or "  +
+                                " (@BotonCI = 1 and len(ltrim(rtrim(coalesce(IMAGENBIT, '')))) > 0)) " +
+                                " and(@BotonSI = 0 or(@BotonSI = 1 and "          + 
+                                " len(ltrim(rtrim(coalesce(IMAGENBIT, '')))) = 0)) " +
+                                " and DPTO =  @departamento ";
+            
+            DataTable dt = new DataTable();
+            
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters
+                                     .Add(new SqlParameter("@departamento", departamento));
+                adapter.SelectCommand.Parameters
+                                     .Add(new SqlParameter("@fotoCodecA", fotoCodecA));
+                adapter.SelectCommand.Parameters
+                                     .Add(new SqlParameter("@fotoCodecB", fotoCodecB));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null)
+            {
+                return NotFound("NO SE ENCONTRO DATA, PUEDE QUE TENGAS CONEXIÓN A INTERNET O ESTES ENVIANDO MAL LA VARIABLE");
+            }
+
+            return Ok(dt);
+
+        }
+
+        //declare @BotonCI bit = 0,
+        //@BotonSI bit = 1
+        //select placa, DPTO, coalesce( imagenbit, '' ) as foto, len(ltrim(rtrim(coalesce(IMAGENBIT,''))))
+        //as Peso
+        //from dp12a120 where
+        //(@BotonCI= 0 or (@BotonCI= 1 and len(ltrim(rtrim(coalesce(IMAGENBIT,''))))>0))
+        //and(@BotonSI= 0 or (@BotonSI= 1 and len(ltrim(rtrim(coalesce(IMAGENBIT,''))))=0))
+        //and dpto = 'nf006'
+
+        //[HttpGet]
+        //[Route("getDataImg/{placa}")]
+        //public ActionResult<DataTable> getDataImg([FromRoute] string placa)
+        //{
+        //    string Sentencia = " select IMAGENBIT, len(ltrim(rtrim(coalesce(IMAGENBIT, '')))) as Peso from dp12a120 where placa = @placa ";
+        //    DataTable dt = new DataTable();
+        //    using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+        //    {                
+        //        using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+        //        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+        //        adapter.SelectCommand.CommandType = CommandType.Text;
+        //        adapter.SelectCommand.Parameters.Add(new SqlParameter("@placa", placa));
+        //        adapter.Fill(dt);
+        //    }
+        //    if (dt == null)
+        //    {
+        //        return NotFound("NO SE ENCONTRO DATA, PUEDE QUE TENGAS CONEXIÓN A INTERNET O ESTES ENVIANDO MAL LA VARIABLE");
+        //    }
+        //    return Ok(dt);
+        //}
 
 
         [HttpGet]
@@ -164,38 +241,44 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
 
         [HttpPut]
         [Route("productUpdate/{Id}")]
-        public async Task<IActionResult> ProductUpdate([FromRoute] int Id,
-                                                       [FromBody] Dp12a120 model)
-        {
+        public async Task<IActionResult> ProductUpdate([FromRoute] int Id, [FromBody] Dp12a120 model) {
             // string imagen = model.IMAGENBIT;
 
-            if (Id != model.Id)
-            {
-                return BadRequest();
+            if (Id != model.Id) {
+                return BadRequest("El ID del producto no es compatible, o no existe");
             }
+
             _context.Entry(model).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return Ok(model);
+
         }
 
         [HttpPost]
         [Route("InvSave")]
         public async Task<IActionResult> InvSave([FromBody] Demo model)
         {
+            if (ModelState.IsValid) {
 
-            if (ModelState.IsValid)
-            {
                 _context.Demo.Add(model);
-                if (await _context.SaveChangesAsync() > 0)
-                {
+                
+                if (await _context.SaveChangesAsync() > 0) {
+                    
                     return Ok(model);
+
                 }
-                else
-                { return BadRequest("Datos incorrectos"); }
+
+                else {
+                    
+                    return BadRequest("Datos incorrectos");
+                
+                }
             }
-            else
-            {
+
+            else {
+
                 return BadRequest(ModelState);
+            
             }
         }
 
@@ -311,6 +394,8 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
 
         }
+
+        
 
         //[HttpPost]
         //[Route("ProductValidate")]
