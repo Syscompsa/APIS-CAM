@@ -21,6 +21,7 @@ namespace WebApplicationSyscompsa.Controllers
         {
             this._context = context;
         }
+
         [HttpGet]
         [Route("GetUsuarios")]
         public IEnumerable<WebUser> GetClientes()
@@ -32,8 +33,7 @@ namespace WebApplicationSyscompsa.Controllers
         [Route("getuser/{User}")]
         public ActionResult<DataTable> getReporteByParam([FromRoute] string User)
         {
-            string Sentencia = "declare @us nvarchar(20) = @User " +
-                               " select * from WebUser where WebUsu = @us ";
+            string Sentencia = " declare @us nvarchar(20) = @User select * from WebUser where WebUsu = @us ";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))

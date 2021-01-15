@@ -48,6 +48,79 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
         }
 
+
+        [HttpGet]
+        [Route("apiGETDP12a120")]
+        public ActionResult<DataTable> apiGETDP12a120()
+        {
+            string Sentencia = "select * from DP12A120";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                //adapter.SelectCommand.Parameters.Add(new SqlParameter("@Id", Id));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+            return Ok(dt);
+        }
+
+        [HttpGet]
+        [Route("GetMasterBarra/{BARRA}")]
+        public ActionResult<DataTable> GetMasterBarra([FromRoute] string BARRA)
+        {
+            string Sentencia = "declare @codBarra nvarchar(150) = @BARRA " +
+                               " select nombre, barra from dp12a120 where barra like @codBarra; ";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@BARRA", "%" + BARRA + "%"));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+            return Ok(dt);
+        }
+
+
+        [HttpGet]
+        [Route("apiGETPROD12a120/{COD}")]
+        public ActionResult<DataTable> apiGETPROD12a120([FromRoute] string COD)
+        {
+            string Sentencia = "declare @prod nvarchar(100) = @COD " +
+                               " select * from dp12a120 where barra = @prod";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@COD", COD));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+            return Ok(dt);
+        }
+
         [HttpGet]
         [Route("getDataReportIng/{param}")]
         public ActionResult<DataTable> getDataReportIng([FromRoute] int param )
@@ -179,7 +252,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("getQRGen")]
         public ActionResult<DataTable> GetQRGen()
         {
-            string Sentencia = "select * from DP12A120";
+            string Sentencia = "select * from DP12A120_F";
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
@@ -221,7 +294,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("ProductoSave")]
         public async Task<IActionResult> CanvaSave([FromBody] Dp12a120 model)
         {
-            string img = model.IMAGENBIT;
+            string img = model.IMAGEN;
 
             if (ModelState.IsValid)
             {
@@ -241,10 +314,10 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
 
         [HttpPut]
         [Route("productUpdate/{Id}")]
-        public async Task<IActionResult> ProductUpdate([FromRoute] int Id, [FromBody] Dp12a120 model) {
+        public async Task<IActionResult> ProductUpdate([FromRoute] string Id, [FromBody] Dp12a120_f model) {
             // string imagen = model.IMAGENBIT;
 
-            if (Id != model.Id) {
+            if (Id != model.PLACA) {
                 return BadRequest("El ID del producto no es compatible, o no existe");
             }
 
@@ -286,7 +359,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("getPlacaProduct/{placa}")]
         public ActionResult<DataTable> GetPlacaProduct([FromRoute] string placa)
         {
-            string Sentencia = "select * from DP12A120 where PLACA = @PLACA";
+            string Sentencia = "select * from DP12A120_F where PLACA = @PLACA";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -299,9 +372,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             }
             if (dt == null)
             {
-
                 return NotFound("");
-
             }
             return Ok(dt);
         }
@@ -356,7 +427,6 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
                 adapter.SelectCommand.Parameters.Add(new SqlParameter("@PLACA", placa));
-
                 adapter.Fill(dt);
             }
 
@@ -364,7 +434,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             {
                 return NotFound("");
             }
-            return Redirect("https://inventory-bb9fa.web.app/");
+            return Redirect("https://tc-inv.web.app/");
             //return Ok(placa);
 
         }
@@ -390,7 +460,6 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 return NotFound("");
             }
 
-            // return Redirect("https://inventory-bb9fa.web.app");
             return Ok(dt);
 
         }

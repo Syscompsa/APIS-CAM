@@ -189,23 +189,26 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             {
                 return NotFound("");
             }
-            return Ok(dt);
-        }
 
+            return Ok(dt);
+
+        }
+        
         [HttpGet]
         [Route("GetCustodioReporte/{cod}")]
         public ActionResult<DataTable> GetCustodioReporte([FromRoute] string cod)
         {
 
             string Sentencia = " declare @NomCust nvarchar(20) = @m " +
-                               " select a.id, a.placa, a.NOMBRE,a.dpto, b.nombre nomDpto, a.CIUDAD, c.nombre nomCiudad, " +
+                               " select a.placa, a.NOMBRE,a.dpto, b.nombre nomDpto, a.CIUDAD, c.nombre nomCiudad, " +
                                " a.MARCA, d.nombre nomMarca, a.CUSTODIO, RTRIM(e.NOMBRE) + ' ' +  " +
                                " RTRIM(e.APELLIDO) nombreCustodio from DP12A120 a                 " +
                                " left join alptabla b on b.master = '008' and b.codigo = a.dpto   " +
                                " left join alptabla c on c.master = '007' and c.codigo = a.CIUDAD " +
                                " left join ALPTABLA d on d.master = 'IA1' and d.codigo = a.MARCA  " +
                                " left join DP12A110 e on e.codigo = a.CUSTODIO " +
-                               " where(len(@NomCust) = 0 or e.APELLIDO like @NomCust or e.NOMBRE like @NomCust or e.DPTO like @NomCust or a.PLACA = @NomCust)";
+                               " where(len(@NomCust) = 0 or e.APELLIDO like @NomCust or e.NOMBRE " +
+                               " like @NomCust or e.DPTO like @NomCust or a.PLACA = @NomCust)";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))

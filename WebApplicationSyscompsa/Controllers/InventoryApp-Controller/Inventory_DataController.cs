@@ -39,11 +39,14 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                     adapter.Fill(dt);
                 }
             }
+
             if (dt == null)
             {
                 return NotFound("");
             }
+
             return Ok(dt);
+
         }
 
         [HttpPost]

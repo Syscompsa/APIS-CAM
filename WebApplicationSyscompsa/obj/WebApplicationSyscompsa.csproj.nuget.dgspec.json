@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj": {}
+    "C:\\Users\\tct\\Desktop\\1-9-2021\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj": {
+    "C:\\Users\\tct\\Desktop\\1-9-2021\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj",
+        "projectUniqueName": "C:\\Users\\tct\\Desktop\\1-9-2021\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj",
         "projectName": "WebApplicationSyscompsa",
-        "projectPath": "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj",
-        "packagesPath": "C:\\Users\\Paulo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\obj\\",
+        "projectPath": "C:\\Users\\tct\\Desktop\\1-9-2021\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj",
+        "packagesPath": "C:\\Users\\tct\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\tct\\Desktop\\1-9-2021\\APIS-CAM\\WebApplicationSyscompsa\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Paulo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\tct\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -104,7 +104,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

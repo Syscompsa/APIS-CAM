@@ -35,7 +35,8 @@ namespace WebApplicationSyscompsa
            //                 "User ID = AkaliServer90_SQLLogin_1; Password = cveb2x36w4;"
            // var connectionB = "Server=tcp:negfar.database.windows.net,1433;Initial Catalog=NegFarBd;Persist Security Info=False;User ID=NegFar;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
            //var connectionB = @"Data Source = syswebservice\SQLEXPRESS01; Initial Catalog = negfar; Persist Security Info = True; User ID = sa; Password = Rootpass1";
-           var connectionB = @"Data Source = SERVIDOR\AGROINDUTRIAS; Initial Catalog = TCTV; Persist Security Info = True; User ID = sa; Password = Rootpass1";
+           var connectionB = @"Data Source = SERVIDOR\AGROINDUSTRIA; Initial Catalog = TCTV;
+                               Persist Security Info = True; User ID = sa; Password = Rootpass1";
            // var connectionB = @"Data Source = guty\SQLEXPRESS; Initial Catalog = WINEDTECH; Persist Security Info = True; User ID = sa; Password = a";
            
            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionB));
@@ -44,16 +45,14 @@ namespace WebApplicationSyscompsa
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
 
             // app.UseCors(builder => builder.WithOrigins("http://localhost:58726", "https://www.alp-cloud.com/", "")
-            app.UseCors(builder => builder.WithOrigins("http://localhost:5000/", "https://www.alp-cloud.com/", "")
+            app.UseCors(builder => builder.WithOrigins("http://localhost:5000/", "https://www.alp-cloud.com/", "https://www.alp-cloud.com:8446", "")
             //app.UseCors(builder => builder.WithOrigins("http://localhost:5000/", "https://www.alp-cloud.com:8446", "")
             .AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
-            if (env.IsDevelopment())
-            {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
 
@@ -61,8 +60,7 @@ namespace WebApplicationSyscompsa
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
+            app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
         }
