@@ -177,17 +177,20 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                                " where (len(@Marca)=0 or d.NOMBRE like @Marca) ";
 
             DataTable dt = new DataTable();
-            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
-            {
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString)) {
+
                 using SqlCommand cmd = new SqlCommand(Sentencia, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
                 adapter.SelectCommand.Parameters.Add(new SqlParameter("@m", "%" + master + "%"));
                 adapter.Fill(dt);
+            
             }
-            if (dt == null)
-            {
+
+            if (dt == null) {
+
                 return NotFound("");
+            
             }
 
             return Ok(dt);
