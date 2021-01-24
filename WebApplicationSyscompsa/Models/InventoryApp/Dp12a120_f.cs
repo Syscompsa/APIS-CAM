@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApplicationSyscompsa.Models.InventoryApp
 {
-    public class Dp12a120_f
-    {
+    public class Dp12a120_f {
       public string     PLACA       { get; set; }
       public string     CLASE       { get; set; }
       public string     NOMBRE      { get; set; }

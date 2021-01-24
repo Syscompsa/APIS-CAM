@@ -10,9 +10,7 @@ namespace WebApplicationSyscompsa.Models
     public class AppDbContext:DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options)
-        {
-        }
+        : base(options) { }
         public DbSet<Web_Paleta> Web_Paleta { get; set; }
         public DbSet<WebUser> WebUser { get; set; }
         public DbSet<Dp12a120> DP12A120 { get; set; }
@@ -26,6 +24,7 @@ namespace WebApplicationSyscompsa.Models
         public DbSet<DP12A110> DP12A110 { get; set; }
         public DbSet<reporteInv> reporteInv { get; set; }
         public DbSet<dp11a110> dp11a110 { get; set; }
+        public DbSet<ANEXO_DP12A120_F> ANEXO_DP12A120_F { get; set; }
    
         //asignamos el valor de los decimales que estan truncandose mediante c#
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,6 +32,7 @@ namespace WebApplicationSyscompsa.Models
 
             modelBuilder.Entity<Dp12a120>().HasKey(pk => pk.PLACA).HasName("PLACA");
             modelBuilder.Entity<Dp12a120_f>().HasKey(pk => pk.PLACA).HasName("PLACA");
+            // modelBuilder.Entity<ANEXO_DP12A120_F>().HasKey(pk => pk.placa).HasName("placa");
 
             //ALPTABLA
             #region

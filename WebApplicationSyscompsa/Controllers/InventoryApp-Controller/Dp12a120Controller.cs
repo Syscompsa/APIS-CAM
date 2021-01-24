@@ -48,6 +48,32 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
         }
 
+        [HttpGet]
+        [Route("GetAnexo_DP12a120_F/{placa}")]
+        public ActionResult<DataTable> GetAnexo_DP12a120_F([FromRoute] string placa)
+        {
+            string Sentencia = " declare @a nvarchar(50) = @placa " +
+                               " select * from DP12a120_F as a " +
+                               " left join ANEXO_DP12A120_F as b ON b.placa = a.placa " +
+                               " where a.PLACA = @a ";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@placa", placa));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+            return Ok(dt);
+        }
+
 
         [HttpGet]
         [Route("apiGETDP12a120")]
@@ -316,7 +342,6 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("productUpdate/{Id}")]
         public async Task<IActionResult> ProductUpdate([FromRoute] string Id, [FromBody] Dp12a120_f model) {
             // string imagen = model.IMAGENBIT;
-
             if (Id != model.PLACA) {
                 return BadRequest("El ID del producto no es compatible, o no existe");
             }
@@ -324,6 +349,94 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             _context.Entry(model).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return Ok(model);
+
+        }
+
+        [HttpGet]
+        [Route("GetImage_a120F/{PLACA}")]
+        public ActionResult<DataTable> GetDP12a120F([FromRoute] string PLACA)
+        {
+            string Sentencia = "select IMAGEN from dp12a120_f where PLACA = @PLACA and (IMAGEN != null or IMAGEN != '')";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@PLACA", PLACA));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+
+            return Ok(dt);
+
+        }
+
+        [HttpGet]
+        [Route("Get_data_120F/{inventrier}")]
+        public ActionResult<DataTable> Get_data_120F( [FromRoute] string inventrier)
+        {
+            string Sentencia = " declare @UserInvetory nvarchar(50) = @inventrier " +
+                               " select a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.REFER, a.SERIE, a.cpadre, a.barra, " +
+                               " a.valor as costo_historico, a.VAL_NORMAL as valor_normal , a.VAL_REVAL as valor_revaluo, " +
+                               " b.periodo, b.codactivo, b.da_per00, b.da_rev00, " +
+                               " coalesce(b.da_per00, 0) + coalesce(b.da_per01, 0) + coalesce(b.da_per02, 0) + " +
+                               " coalesce(b.da_per03, 0) + coalesce(b.da_per04, 0) + coalesce(b.da_per05, 0) + coalesce(b.da_per06, 0) " +
+                               " + coalesce(b.da_per07, 0) + coalesce(b.da_per08, 0) + coalesce(b.da_per10, 0) + coalesce(b.da_per11, 0) " +
+                               " + coalesce(b.da_per12, 0) as sumDa_per , " +
+                               " coalesce(b.da_rev00, 0) + coalesce(b.da_rev01, 0) + coalesce(b.da_rev02, 0) + coalesce(b.da_rev03, 0) " +
+                               " + coalesce(b.da_rev04, 0) + coalesce(b.da_rev05, 0) + coalesce(b.da_rev06, 0) + coalesce(b.da_rev07, 0) " +
+                               " + coalesce(b.da_rev08, 0) + coalesce(b.da_rev10, 0) + coalesce(b.da_rev11, 0) " +
+                               " + coalesce(b.da_rev12, 0) as sumRev from DP12a120_F a " +
+                               " left join dp12asal b on b.codactivo = a.PLACA and b.periodo >= 2021 " +
+                               " where USUCREA != '' and(USUCREA = @UserInvetory) ";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@inventrier", inventrier));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+
+            return Ok(dt);
+
+        }
+
+
+        [HttpGet]
+        [Route("Get_Inventariadores")]
+        public ActionResult<DataTable> Get_Inventariadores()
+        {
+            string Sentencia = "select * from alptabla where master = 'ACTIV'";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.Fill(dt);
+            }
+
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+
+            return Ok(dt);
 
         }
 
