@@ -75,7 +75,6 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         }
 
 
-
         [HttpGet]
         [Route("apiGETDP12a120")]
         public ActionResult<DataTable> apiGETDP12a120()
@@ -89,32 +88,6 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
                 //adapter.SelectCommand.Parameters.Add(new SqlParameter("@Id", Id));
-                adapter.Fill(dt);
-            }
-
-            if (dt == null)
-            {
-                return NotFound("");
-            }
-            return Ok(dt);
-        }
-
-        [HttpGet]
-        [Route("GetDp12a120FDate/{Date}/{USC}")]
-        public ActionResult<DataTable> GetDp12a120FDate( [FromRoute] string Date, [FromRoute] string USC)
-        {
-            string Sentencia = "  select placa,FECHAC " +
-                               " from DP12a120_F " +
-                               " where CAST(FECHAC AS date) = @date and USUCREA = @USC";
-
-            DataTable dt = new DataTable();
-            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
-            {
-                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.SelectCommand.CommandType = CommandType.Text;
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@date", Date));
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@USC", USC));
                 adapter.Fill(dt);
             }
 
@@ -305,7 +278,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("getQRGen")]
         public ActionResult<DataTable> GetQRGen()
         {
-            string Sentencia = "select placa from DP12A120_F";
+            string Sentencia = "select * from DP12A120_F";
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
@@ -349,18 +322,15 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         {
             string img = model.IMAGEN;
 
-            if (ModelState.IsValid) {
-
+            if (ModelState.IsValid)
+            {
                 _context.DP12A120.Add(model);
                 if (await _context.SaveChangesAsync() > 0)
                 {
                     return Ok(model);
                 }
-
                 else
-                { 
-                    return BadRequest("Datos incorrectos");
-                }
+                { return BadRequest("Datos incorrectos"); }
             }
             else
             {
@@ -370,10 +340,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
 
         [HttpPut]
         [Route("productUpdate/{Id}")]
-        //tctv //
         public async Task<IActionResult> ProductUpdate([FromRoute] string Id, [FromBody] Dp12a120_f model) {
-        //negfar //
-        //public async Task<IActionResult> ProductUpdate([FromRoute] string Id, [FromBody] Dp12a120 model) {
             // string imagen = model.IMAGENBIT;
             if (Id != model.PLACA) {
                 return BadRequest("El ID del producto no es compatible, o no existe");
@@ -384,8 +351,6 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(model);
 
         }
-
-        
 
         [HttpGet]
         [Route("GetImage_a120F/{PLACA}")]
@@ -411,15 +376,25 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
 
         }
-        
-        
+
         [HttpGet]
-        [Route("UpdateElement/{PLACA}/{ELEMENT}/{COD}")]
-        public ActionResult<DataTable> UpdateElement([FromRoute] string PLACA, [FromRoute] string ELEMENT, [FromRoute] string COD)
+        [Route("Get_data_120F/{inventrier}")]
+        public ActionResult<DataTable> Get_data_120F( [FromRoute] string inventrier)
         {
-            var element = ELEMENT;
-            string Sentencia = " declare @plac nvarchar(50) = @PLACA " +
-                               " update dp12a120_f set " + element + " = @COD where placa = @plac";
+            string Sentencia = " declare @UserInvetory nvarchar(50) = @inventrier " +
+                               " select a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.REFER, a.SERIE, a.cpadre, a.barra, " +
+                               " a.valor as costo_historico, a.VAL_NORMAL as valor_normal , a.VAL_REVAL as valor_revaluo, " +
+                               " b.periodo, b.codactivo, b.da_per00, b.da_rev00, " +
+                               " coalesce(b.da_per00, 0) + coalesce(b.da_per01, 0) + coalesce(b.da_per02, 0) + " +
+                               " coalesce(b.da_per03, 0) + coalesce(b.da_per04, 0) + coalesce(b.da_per05, 0) + coalesce(b.da_per06, 0) " +
+                               " + coalesce(b.da_per07, 0) + coalesce(b.da_per08, 0) + coalesce(b.da_per10, 0) + coalesce(b.da_per11, 0) " +
+                               " + coalesce(b.da_per12, 0) as sumDa_per , " +
+                               " coalesce(b.da_rev00, 0) + coalesce(b.da_rev01, 0) + coalesce(b.da_rev02, 0) + coalesce(b.da_rev03, 0) " +
+                               " + coalesce(b.da_rev04, 0) + coalesce(b.da_rev05, 0) + coalesce(b.da_rev06, 0) + coalesce(b.da_rev07, 0) " +
+                               " + coalesce(b.da_rev08, 0) + coalesce(b.da_rev10, 0) + coalesce(b.da_rev11, 0) " +
+                               " + coalesce(b.da_rev12, 0) as sumRev from DP12a120_F a " +
+                               " left join dp12asal b on b.codactivo = a.PLACA and b.periodo >= 2021 " +
+                               " where USUCREA != '' and(USUCREA = @UserInvetory) ";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -427,86 +402,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 using SqlCommand cmd = new SqlCommand(Sentencia, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@PLACA", PLACA));
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@COD", COD));
-                adapter.Fill(dt);
-            }
-
-            if (dt == null) 
-            {
-                return NotFound("");
-            }
-
-            return Ok(dt);
-
-        }
-
-        [HttpGet]
-        [Route("Get_data_120F/{inventrier}/{OType}/{valueTypeSQL}/{valor}")]
-        public ActionResult<DataTable> Get_data_120F( [FromRoute] string inventrier, [FromRoute] string OType,
-                                                      [FromRoute] string valueTypeSQL, [FromRoute] string valor ) {
-            string valueRoute;
-            string Sentencia;
-
-            if (valueTypeSQL == "_DCAST_") 
-            {
-                valueRoute = " c.NOMBRE + ' ' + c.APELLIDO ";
-                Sentencia = " declare @UserInvetory nvarchar(50) = @inventrier " +
-                              " select a.NOMBRE as Nombre_f, a .BARRA as Barra_f, b.VAL_NORMAL," +
-                              " a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.USUMODI, a.REFER, a.SERIE, a.cpadre, " +
-                              " b.VALOR, b.cpadre as c_padre_f, " +
-                              " isnull( ltrim(rtrim( c.NOMBRE + ' ' + c.APELLIDO )), '--') as CUSTODIO," +
-                              " b.NOMBRE, b.BARRA from DP12a120_F as a " +
-                              " left join DP12a120 as b ON b.BARRA  = a.BARRA " +
-                              " left join dp12a110 as c on C.CODIGO = a.CUSTODIO " +
-                              " where a.USUCREA != '' and(a.USUCREA = @UserInvetory)" +
-                              " and " + valueRoute + " like @valor or a.CUSTODIO like @valor" +
-                              " order by a.custodio " + OType;
-            }
-
-            else
-            {
-                Sentencia = " declare @UserInvetory nvarchar(50) = @inventrier " +
-                             " select a.NOMBRE as Nombre_f, a .BARRA as Barra_f, b.VAL_NORMAL," +
-                             " a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.USUMODI, a.REFER, a.SERIE, a.cpadre, " +
-                             " b.VALOR, b.cpadre as c_padre_f, " +
-                             " isnull( ltrim(rtrim( c.NOMBRE + ' ' + c.APELLIDO )), '--') as CUSTODIO," +
-                             " b.NOMBRE, b.BARRA from DP12a120_F as a " +
-                             " left join DP12a120 as b ON b.BARRA  = a.BARRA " +
-                             " left join dp12a110 as c on C.CODIGO = a.CUSTODIO " +
-                             " where a.USUCREA != '' and(a.USUCREA = @UserInvetory)" +
-                             " and " + valueTypeSQL + " like @valor order by " + valueTypeSQL + " " + OType;
-            }
-
-
-            #region
-            //if(valueTypeSQL == "")
-            //{
-            //    if (valor == "")
-            //    {
-            //        valor = "% %";
-            //    }
-            //}
-
-            //string Sentencia = " declare @UserInvetory nvarchar(50) = @inventrier " +
-            //                   " select a.NOMBRE as Nombre_f, a .BARRA as Barra_f, b.VAL_NORMAL," +
-            //                   " a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.USUMODI, a.REFER, a.SERIE, a.cpadre, " +
-            //                   " b.VALOR, b.cpadre as c_padre_f, " +
-            //                   " isnull( ltrim(rtrim( c.NOMBRE + ' ' + c.APELLIDO )), '--') as CUSTODIO , b.NOMBRE, b.BARRA from DP12a120_F as a " +
-            //                   " left join DP12a120 as b ON b.BARRA = a.BARRA " +
-            //                   " left join dp12a110 as c on C.CODIGO = a.CUSTODIO " +
-            //                   " where a.USUCREA != '' and(a.USUCREA = @UserInvetory)" +
-            //                   " and " + valueTypeSQL + " like @valor " +
-            //                   " order by " + valueTypeSQL + " " + OType;
-            #endregion
-
-            DataTable dt = new DataTable();
-            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString)) {
-                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.SelectCommand.CommandType = CommandType.Text;
                 adapter.SelectCommand.Parameters.Add(new SqlParameter("@inventrier", inventrier));
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@valor", "%" + valor + "%"));
                 adapter.Fill(dt);
             }
 
@@ -518,6 +414,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
 
         }
+
 
         [HttpGet]
         [Route("Get_Inventariadores")]
@@ -533,36 +430,15 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 adapter.SelectCommand.CommandType = CommandType.Text;
                 adapter.Fill(dt);
             }
+
             if (dt == null)
             {
                 return NotFound("");
             }
+
             return Ok(dt);
+
         }
-
-
-         [HttpGet]
-         [Route("GetCustodios/{custodios}")]
-            public ActionResult<DataTable> GetCustodios([FromRoute] string custodios) {
-
-                string Sentencia = "select RTRIM(LTRIM( apellido + ' ' + nombre )) as custodio, codigo from DP12A110 where NOMBRE + APELLIDO like @cust";
-
-                DataTable dt = new DataTable();
-                using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString)) {
-                    using SqlCommand cmd = new SqlCommand(Sentencia, connection);
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    adapter.SelectCommand.CommandType = CommandType.Text;
-                    adapter.SelectCommand.Parameters.Add(new SqlParameter("@cust", "%" + custodios + "%"));
-                    adapter.Fill(dt);
-                }
-
-                if (dt == null) {
-                    return NotFound("");
-                }
-
-                return Ok(dt);
-
-            }
 
         [HttpPost]
         [Route("InvSave")]
@@ -596,11 +472,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("getPlacaProduct/{placa}")]
         public ActionResult<DataTable> GetPlacaProduct([FromRoute] string placa)
         {
-            // TC TV //
             string Sentencia = "select * from DP12A120_F where PLACA = @PLACA";
-
-            // NEGFAR //
-            //string Sentencia = "select * from DP12A120 where PLACA = @PLACA";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -705,5 +577,25 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
 
         }
 
+        
+
+        //[HttpPost]
+        //[Route("ProductValidate")]
+        //public async Task<IActionResult> ProductValidate([FromBody] Dp12a120 ProductInfo)
+        //{
+        //    var result = await _context.DP12A120.FirstOrDefaultAsync(x =>
+        //        x.PLACA == ProductInfo.PLACA
+        //    );
+
+        //    if (result != null)
+        //    {
+        //        return Ok(result);
+        //    }
+        //    else
+        //    {
+        //        //ModelState.AddModelError(string.Empty, "Usuario o contraseña invalido");
+        //        return BadRequest("Producto no encontrado");
+        //    }
+        //}
     }
 }
