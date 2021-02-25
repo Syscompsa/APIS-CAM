@@ -8728,25 +8728,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\tct\\.nuget\\packages\\": {},
+    "C:\\Users\\Paulo\\.nuget\\packages\\": {},
     "C:\\Microsoft\\Xamarin\\NuGet\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tct\\Desktop\\1-9-2021\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj",
+      "projectUniqueName": "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj",
       "projectName": "WebApplicationSyscompsa",
-      "projectPath": "C:\\Users\\tct\\Desktop\\1-9-2021\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj",
-      "packagesPath": "C:\\Users\\tct\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tct\\Desktop\\1-9-2021\\APIS-CAM\\WebApplicationSyscompsa\\obj\\",
+      "projectPath": "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\WebApplicationSyscompsa.csproj",
+      "packagesPath": "C:\\Users\\Paulo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Paulo\\Desktop\\APIS-CAM\\WebApplicationSyscompsa\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\tct\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Paulo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -8759,6 +8759,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -8770,6 +8771,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Magick.NET-Q16-x64": {
             "target": "Package",
@@ -8832,7 +8834,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }

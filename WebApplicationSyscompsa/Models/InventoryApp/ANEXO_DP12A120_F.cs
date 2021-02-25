@@ -15,4 +15,5 @@ namespace WebApplicationSyscompsa.Models.InventoryApp
        public string metodtec { get; set; }
        public string observaciones { get; set; }
     }
+
 }

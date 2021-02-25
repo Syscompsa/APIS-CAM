@@ -133,7 +133,6 @@ C:\Users\Paulo\source\repos\WebApplicationSyscompsa\WebApplicationSyscompsa\obj\
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Debug\netcoreapp3.1\web.config
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Debug\netcoreapp3.1\appsettings.json
-C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Debug\netcoreapp3.1\WebApplicationSyscompsa.deps.json
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Debug\netcoreapp3.1\WebApplicationSyscompsa.runtimeconfig.json
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Debug\netcoreapp3.1\WebApplicationSyscompsa.exe
@@ -262,3 +261,11 @@ C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Debug\netcoreapp3.1\
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Debug\netcoreapp3.1\WebApplicationSyscompsa.dll
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Debug\netcoreapp3.1\WebApplicationSyscompsa.pdb
 C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Debug\netcoreapp3.1\WebApplicationSyscompsa.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Debug\netcoreapp3.1\Magick.NET-Q16-x64.dll
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Debug\netcoreapp3.1\Magick.NET.Core.dll
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Debug\netcoreapp3.1\runtimes\linux-x64\native\Magick.Native-Q16-x64.dll.so
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Debug\netcoreapp3.1\runtimes\osx-x64\native\Magick.Native-Q16-x64.dll.dylib
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\Magick.Native-Q16-x64.dll
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Debug\netcoreapp3.1\WebApplicationSyscompsa.csproj.CoreCompileInputs.cache
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Debug\netcoreapp3.1\scopedcss\bundle\WebApplicationSyscompsa.styles.css
+C:\Users\Paulo\Desktop\APIS-CAM\WebApplicationSyscompsa\obj\Debug\netcoreapp3.1\WebApplicationSyscompsa.genruntimeconfig.cache
