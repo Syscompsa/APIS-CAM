@@ -148,6 +148,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
         }
 
+
         [HttpGet]
         [Route("getDataReportIng/{param}")]
         public ActionResult<DataTable> getDataReportIng([FromRoute] int param )
@@ -175,6 +176,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             }
             return Ok(dt);
         }
+
 
         //declare @plac nvarchar(50) = '0101032088'
         //select placa, coalesce( imagenbit, '' ) as foto, len(ltrim(rtrim(coalesce(IMAGENBIT,''))))
@@ -387,20 +389,46 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         }
 
         [HttpGet]
-        [Route("Get_data_120F/{inventrier}/{option}/{valueSql}")]
-        public ActionResult<DataTable> Get_data_120F( [FromRoute] string inventrier, [FromRoute] string option, [FromRoute] string valueSql)
+        [Route("Get_data_120F/{inventrier}/{option}/{valueSql}/{valor}")]
+        public ActionResult<DataTable> Get_data_120F( [FromRoute] string inventrier,
+                                                      [FromRoute] string option,
+                                                      [FromRoute] string valueSql,
+                                                      [FromRoute] string valor)
         {
-            string Sentencia = " declare @UserInvetory nvarchar(50) = @inventrier " +
-                               " declare @ValorSQL nvarchar(100) = @valueSql " +
-                               " select a.NOMBRE as Nombre_f, a.BARRA as Barra_f, b.VAL_NORMAL, " +
-                               " a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.USUMODI, a.REFER, a.SERIE, a.cpadre, " +
-                               " a.custodio, b.VALOR, b.cpadre as c_padre_f, isnull(ltrim(rtrim(c.NOMBRE + ' ' + c.APELLIDO)), '--') " +
-                               " as NAME_CUSTODIO , b.NOMBRE, b.BARRA from DP12a120_F as a " + 
-                               " left join DP12a120 as b ON b.BARRA = a.BARRA " +
-                               " left join dp12a110 as c on C.CODIGO = a.CUSTODIO " +
-                               " where a.USUCREA != '' and(a.USUCREA = @UserInvetory) " +
-                               " and c.NOMBRE + ' ' + c.APELLIDO like @ValorSQL or a.CUSTODIO like @ValorSQL " +
-                               " order by a.custodio " + option;
+
+            var value = "";
+            var Sentencia = "";
+            if ( valueSql == "_DCAST_")
+            {
+                value = "c.NOMBRE + ' ' + c.APELLIDO";
+                Sentencia = " declare @UserInvetory nvarchar(50) = @inventrier " +
+                            " declare @ValorSQL nvarchar(100) = @values " +
+                            " select a.NOMBRE as Nombre_f, a.BARRA as Barra_f, b.VAL_NORMAL, " +
+                            " a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.USUMODI, a.REFER, a.SERIE, a.cpadre, " +
+                            " a.custodio, b.VALOR, b.cpadre as c_padre_f, isnull(ltrim(rtrim(c.NOMBRE + ' ' + c.APELLIDO)), '--') " +
+                            " as NAME_CUSTODIO , b.NOMBRE, b.BARRA from DP12a120_F as a " +
+                            " left join DP12a120 as b ON b.BARRA = a.BARRA " +
+                            " left join dp12a110 as c on C.CODIGO = a.CUSTODIO " +
+                            " where a.USUCREA != '' and(a.USUCREA = @UserInvetory) " +
+                            " and " + value + " like @ValorSQL or a.CUSTODIO like @ValorSQL " +
+                            " order by a.custodio " + option;
+            }
+
+            else
+            {
+                Sentencia = " declare @UserInvetory nvarchar(50) = @inventrier " +
+                            " declare @ValorSQL nvarchar(100) = @values " +
+                            " select a.NOMBRE as Nombre_f, a.BARRA as Barra_f, b.VAL_NORMAL, " +
+                            " a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.USUMODI, a.REFER, a.SERIE, a.cpadre, " +
+                            " a.custodio, b.VALOR, b.cpadre as c_padre_f, isnull(ltrim(rtrim(c.NOMBRE + ' ' + c.APELLIDO)), '--') " +
+                            " as NAME_CUSTODIO , b.NOMBRE, b.BARRA from DP12a120_F as a " +
+                            " left join DP12a120 as b ON b.BARRA = a.BARRA " +
+                            " left join dp12a110 as c on C.CODIGO = a.CUSTODIO " +
+                            " where a.USUCREA != '' and(a.USUCREA = @UserInvetory) " +
+                            " and " + valueSql + " like @ValorSQL " +
+                            " order by a.custodio " + option;
+            }
+                   
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -409,7 +437,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
                 adapter.SelectCommand.Parameters.Add(new SqlParameter("@inventrier", inventrier));
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@valueSql", valueSql));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@values", valor));
                 adapter.Fill(dt);
             }
 
