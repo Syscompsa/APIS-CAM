@@ -387,11 +387,11 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         }
 
         [HttpGet]
-        [Route("Get_data_120F/{inventrier}")]
-        public ActionResult<DataTable> Get_data_120F( [FromRoute] string inventrier)
+        [Route("Get_data_120F/{inventrier}/{option}/{valueSql}")]
+        public ActionResult<DataTable> Get_data_120F( [FromRoute] string inventrier, [FromRoute] string option, [FromRoute] string valueSql)
         {
-            string Sentencia = " declare @UserInvetory nvarchar(50) = 'Elino' " +
-                               " declare @ValorSQL nvarchar(100) = '%0000000303%' " +
+            string Sentencia = " declare @UserInvetory nvarchar(50) = @inventrier " +
+                               " declare @ValorSQL nvarchar(100) = @valueSql " +
                                " select a.NOMBRE as Nombre_f, a.BARRA as Barra_f, b.VAL_NORMAL, " +
                                " a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.USUMODI, a.REFER, a.SERIE, a.cpadre, " +
                                " a.custodio, b.VALOR, b.cpadre as c_padre_f, isnull(ltrim(rtrim(c.NOMBRE + ' ' + c.APELLIDO)), '--') " +
@@ -400,7 +400,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                                " left join dp12a110 as c on C.CODIGO = a.CUSTODIO " +
                                " where a.USUCREA != '' and(a.USUCREA = @UserInvetory) " +
                                " and c.NOMBRE + ' ' + c.APELLIDO like @ValorSQL or a.CUSTODIO like @ValorSQL " +
-                               " order by a.custodio asc ";
+                               " order by a.custodio " + option;
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -409,6 +409,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
                 adapter.SelectCommand.Parameters.Add(new SqlParameter("@inventrier", inventrier));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@valueSql", valueSql));
                 adapter.Fill(dt);
             }
 
