@@ -90,6 +90,30 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         
         }
 
+        [HttpGet]
+        [Route("SelectAnexoGen")]
+        public ActionResult<DataTable> SelectAnexoGen([FromRoute] int Id)
+        {
+            string Sentencia = " select * from ANEXO_DP12A120_F";
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@Id", Id));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+
+            return Ok(dt);
+
+        }
+
 
         [HttpGet]
         [Route("SelectAnexos/{placa}")]

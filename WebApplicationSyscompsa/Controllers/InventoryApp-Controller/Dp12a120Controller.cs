@@ -50,6 +50,31 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         }
 
         [HttpGet]
+        [Route("GetCustodios/{name}")]
+        public ActionResult<DataTable> GetCustodios([FromRoute] string name) {
+
+            string Sentencia = " select ltrim(rtrim(nombre)) + ' ' + ltrim(rtrim(apellido)) as custodio, codigo" +
+                               " from dp12a110 where NOMBRE + ' ' + APELLIDO like @name or codigo = @name ";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString)) {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@name", "%" + name + "%"));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null) {
+                return NotFound("");
+            }
+
+            return Ok(dt);
+
+        }
+
+
+        [HttpGet]
         [Route("GetAnexo_DP12a120_F/{placa}")]
         public ActionResult<DataTable> GetAnexo_DP12a120_F([FromRoute] string placa)
         {
@@ -101,8 +126,8 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
 
         [HttpGet]
         [Route("GetMasterBarra/{BARRA}")]
-        public ActionResult<DataTable> GetMasterBarra([FromRoute] string BARRA)
-        {
+        public ActionResult<DataTable> GetMasterBarra([FromRoute] string BARRA) {
+
             string Sentencia = "declare @codBarra nvarchar(150) = @BARRA " +
                                " select nombre, barra from dp12a120 where barra like @codBarra; ";
 
@@ -116,11 +141,14 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 adapter.Fill(dt);
             }
 
-            if (dt == null)
-            {
+            if (dt == null) {
+
                 return NotFound("");
+
             }
+
             return Ok(dt);
+        
         }
 
 
@@ -398,6 +426,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
 
             var value = "";
             var Sentencia = "";
+
             if ( valueSql == "_DCAST_")
             {
                 value = "c.NOMBRE + ' ' + c.APELLIDO";
@@ -425,7 +454,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                             " left join DP12a120 as b ON b.BARRA = a.BARRA " +
                             " left join dp12a110 as c on C.CODIGO = a.CUSTODIO " +
                             " where a.USUCREA != '' and(a.USUCREA = @UserInvetory) " +
-                            " and " + valueSql + " like @ValorSQL " +
+                            " and " + valueSql + " like @values " +
                             " order by a.custodio " + option;
             }
                    
@@ -437,7 +466,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
                 adapter.SelectCommand.Parameters.Add(new SqlParameter("@inventrier", inventrier));
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@values", valor));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@values", "%" + valor + "%"));
                 adapter.Fill(dt);
             }
 
