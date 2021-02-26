@@ -7,7 +7,6 @@ namespace WebApplicationSyscompsa.Models.InventoryApp
 {
     public class DP12A110
     {
-      public int    Id          {get; set;}
       public string CODIGO      {get; set;}
       public string APELLIDO    {get; set;}
       public string NOMBRE      {get; set;}

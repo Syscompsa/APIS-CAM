@@ -66,8 +66,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(Sentencia, connection))
-                {
+                using (SqlCommand cmd = new SqlCommand(Sentencia, connection)) {
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     adapter.SelectCommand.CommandType = CommandType.Text;
                     // adapter.SelectCommand.Parameters.Add(new SqlParameter("@Id", Id));

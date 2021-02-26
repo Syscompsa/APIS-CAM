@@ -10,7 +10,7 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("88d82f63-e99f-4f85-9de8-d012832fa42a")]
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("822d837d-5e5f-445c-8f37-27f2ae169547")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebApplicationSyscompsa")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]

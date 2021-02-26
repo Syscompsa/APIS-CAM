@@ -32,6 +32,7 @@ namespace WebApplicationSyscompsa.Models
 
             modelBuilder.Entity<Dp12a120>().HasKey(pk => pk.PLACA).HasName("PLACA");
             modelBuilder.Entity<Dp12a120_f>().HasKey(pk => pk.PLACA).HasName("PLACA");
+            modelBuilder.Entity<DP12A110>().HasKey(pk => pk.CODIGO).HasName("CODIGO");
             // modelBuilder.Entity<ANEXO_DP12A120_F>().HasKey(pk => pk.placa).HasName("placa");
 
             //ALPTABLA
@@ -43,14 +44,28 @@ namespace WebApplicationSyscompsa.Models
 
             //DP12A110
             #region
-            //modelBuilder.Entity<Dp12a120>().Property(a => a.VALOR).HasColumnType("decimal(10,2)");
-            //modelBuilder.Entity<Dp12a120>().Property(a => a.VALOR2).HasColumnType("decimal(10,2)");
-            //modelBuilder.Entity<Dp12a120>().Property(a => a.VALOR_RES2).HasColumnType("decimal(10,2)");
-            //modelBuilder.Entity<Dp12a120>().Property(a => a.VALOR_RESI).HasColumnType("decimal(10,2)");
-            //modelBuilder.Entity<Dp12a120>().Property(a => a.VALRES).HasColumnType("decimal(10,2)");
-            //modelBuilder.Entity<Dp12a120>().Property(a => a.VAL_NORMAL).HasColumnType("decimal(10,2)");
-            //modelBuilder.Entity<Dp12a120>().Property(a => a.VAL_REVAL).HasColumnType("decimal(10,2)");
-            //modelBuilder.Entity<Dp12a120>().Property(a => a.VIDAUTIL).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120>().Property(a => a.VALOR).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120>().Property(a => a.VALOR2).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120>().Property(a => a.VALOR_RES2).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120>().Property(a => a.VALOR_RESI).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120>().Property(a => a.VALRES).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120>().Property(a => a.VAL_NORMAL).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120>().Property(a => a.VAL_REVAL).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120>().Property(a => a.VIDAUTIL).HasColumnType("decimal(10,2)");
+            #endregion
+
+
+            //dp12a120_f
+            #region
+            modelBuilder.Entity<Dp12a120_f>().Property(a => a.VALOR).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120_f>().Property(a => a.VALOR2).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120_f>().Property(a => a.VALOR_RES2).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120_f>().Property(a => a.VALOR_RESI).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120_f>().Property(a => a.VALRES).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120_f>().Property(a => a.VAL_NORMAL).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120_f>().Property(a => a.VAL_REVAL).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Dp12a120_f>().Property(a => a.VIDAUTIL).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<ANEXO_DP12A120_F>().Property(a => a.avcomer).HasColumnType("decimal(10,2)");
             #endregion
 
             //AppConfig
@@ -60,7 +75,7 @@ namespace WebApplicationSyscompsa.Models
             #endregion
 
 
-     
+
         }
 
         public DbSet<PrintHist> PrintHist { get; set; }

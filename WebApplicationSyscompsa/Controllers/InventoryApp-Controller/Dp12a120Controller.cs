@@ -27,9 +27,10 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         }
         [HttpGet]
         [Route("getQR/{Id}")]
-        public ActionResult<DataTable> GetQR([FromRoute] int Id)
+        public ActionResult<DataTable> GetQR([FromRoute] string Id)
         {
-            string Sentencia = "select * from DP12A120 where Id = @Id";
+            string Sentencia = "select * from DP12A120_F where placa = @Id";
+           // string Sentencia = "select * from DP12A120 where Id = @Id";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -278,7 +279,11 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("getQRGen")]
         public ActionResult<DataTable> GetQRGen()
         {
+            //TC
             string Sentencia = "select * from DP12A120_F";
+            
+            //NEGFAR
+            //string Sentencia = "select * from DP12A120";
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
@@ -340,7 +345,11 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
 
         [HttpPut]
         [Route("productUpdate/{Id}")]
-        public async Task<IActionResult> ProductUpdate([FromRoute] string Id, [FromBody] Dp12a120_f model) {
+        //tc
+        public async Task<IActionResult> ProductUpdate([FromRoute] string Id, [FromBody] Dp12a120_f model) {    
+        
+        //NEGFAR
+        //public async Task<IActionResult> ProductUpdate([FromRoute] string Id, [FromBody] Dp12a120 model) {
             // string imagen = model.IMAGENBIT;
             if (Id != model.PLACA) {
                 return BadRequest("El ID del producto no es compatible, o no existe");
@@ -381,20 +390,17 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         [Route("Get_data_120F/{inventrier}")]
         public ActionResult<DataTable> Get_data_120F( [FromRoute] string inventrier)
         {
-            string Sentencia = " declare @UserInvetory nvarchar(50) = @inventrier " +
-                               " select a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.REFER, a.SERIE, a.cpadre, a.barra, " +
-                               " a.valor as costo_historico, a.VAL_NORMAL as valor_normal , a.VAL_REVAL as valor_revaluo, " +
-                               " b.periodo, b.codactivo, b.da_per00, b.da_rev00, " +
-                               " coalesce(b.da_per00, 0) + coalesce(b.da_per01, 0) + coalesce(b.da_per02, 0) + " +
-                               " coalesce(b.da_per03, 0) + coalesce(b.da_per04, 0) + coalesce(b.da_per05, 0) + coalesce(b.da_per06, 0) " +
-                               " + coalesce(b.da_per07, 0) + coalesce(b.da_per08, 0) + coalesce(b.da_per10, 0) + coalesce(b.da_per11, 0) " +
-                               " + coalesce(b.da_per12, 0) as sumDa_per , " +
-                               " coalesce(b.da_rev00, 0) + coalesce(b.da_rev01, 0) + coalesce(b.da_rev02, 0) + coalesce(b.da_rev03, 0) " +
-                               " + coalesce(b.da_rev04, 0) + coalesce(b.da_rev05, 0) + coalesce(b.da_rev06, 0) + coalesce(b.da_rev07, 0) " +
-                               " + coalesce(b.da_rev08, 0) + coalesce(b.da_rev10, 0) + coalesce(b.da_rev11, 0) " +
-                               " + coalesce(b.da_rev12, 0) as sumRev from DP12a120_F a " +
-                               " left join dp12asal b on b.codactivo = a.PLACA and b.periodo >= 2021 " +
-                               " where USUCREA != '' and(USUCREA = @UserInvetory) ";
+            string Sentencia = " declare @UserInvetory nvarchar(50) = 'Elino' " +
+                               " declare @ValorSQL nvarchar(100) = '%0000000303%' " +
+                               " select a.NOMBRE as Nombre_f, a.BARRA as Barra_f, b.VAL_NORMAL, " +
+                               " a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.USUMODI, a.REFER, a.SERIE, a.cpadre, " +
+                               " a.custodio, b.VALOR, b.cpadre as c_padre_f, isnull(ltrim(rtrim(c.NOMBRE + ' ' + c.APELLIDO)), '--') " +
+                               " as NAME_CUSTODIO , b.NOMBRE, b.BARRA from DP12a120_F as a " + 
+                               " left join DP12a120 as b ON b.BARRA = a.BARRA " +
+                               " left join dp12a110 as c on C.CODIGO = a.CUSTODIO " +
+                               " where a.USUCREA != '' and(a.USUCREA = @UserInvetory) " +
+                               " and c.NOMBRE + ' ' + c.APELLIDO like @ValorSQL or a.CUSTODIO like @ValorSQL " +
+                               " order by a.custodio asc ";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -473,6 +479,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
         public ActionResult<DataTable> GetPlacaProduct([FromRoute] string placa)
         {
             string Sentencia = "select * from DP12A120_F where PLACA = @PLACA";
+            //string Sentencia = "select * from DP12A120 where PLACA = @PLACA";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
