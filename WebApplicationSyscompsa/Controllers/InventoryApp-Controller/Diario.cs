@@ -63,12 +63,34 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                                " left join ALPTABLA as d ON d.master = '008' and d.codigo = a.DPTO where a.CUSTODIO = @User ";
 
             DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString)) {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@User", user));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null) {
+                return NotFound("");
+            }
+
+            return Ok(dt);
+        }
+
+        [HttpGet]
+        [Route("GetDeptALP/{Dep}")]
+        public ActionResult<DataTable> GetDeptALP([FromRoute] string Dep)
+        {
+            string Sentencia = "select CODIGO, nombre from alptabla where master = '008' and codigo like @Dep";
+
+            DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
                 using SqlCommand cmd = new SqlCommand(Sentencia, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@User", user));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@Dep", "%" + Dep + "%"));
                 adapter.Fill(dt);
             }
 
@@ -78,7 +100,33 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             }
 
             return Ok(dt);
+        }
 
+        [HttpGet]
+        [Route("GetReportByOption/{Option}")]
+        public ActionResult<DataTable> GetReportByOption([FromRoute] string Option)
+        {
+            string Sentencia = " select d.nombre as nam_dep, a.NOMBRE, a.REFER, "       +
+                               " a.SERIE, a.FECHAC, a.CUSTODIO from dp12a120_f as a " +
+                               " left join ALPTABLA as d ON d.master = '008' "        +
+                               " and d.codigo = a.DPTO where a.DPTO = @Dep ";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(Sentencia, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.SelectCommand.CommandType = CommandType.Text;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@Dep", Option));
+                adapter.Fill(dt);
+            }
+
+            if (dt == null)
+            {
+                return NotFound("");
+            }
+
+            return Ok(dt);
         }
 
     }

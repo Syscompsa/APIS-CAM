@@ -49,19 +49,21 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
         }
 
+
         [HttpGet]
         [Route("GetCustodios/{name}")]
         public ActionResult<DataTable> GetCustodios([FromRoute] string name) {
 
-            string Sentencia = " select ltrim(rtrim(nombre)) + ' ' + ltrim(rtrim(apellido)) as custodio, codigo" +
-                               " from dp12a110 where NOMBRE + ' ' + APELLIDO like @name or codigo = @name ";
+            string Sentencia = " declare @name nvarchar(100) = @names " +
+                               " select ltrim(rtrim(nombre)) + ' ' + ltrim(rtrim(apellido)) as custodio, codigo" +
+                               " from dp12a110 where NOMBRE + ' ' + APELLIDO like @name or codigo like @name ";
 
             DataTable dt = new DataTable();
             using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString)) {
                 using SqlCommand cmd = new SqlCommand(Sentencia, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.SelectCommand.CommandType = CommandType.Text;
-                adapter.SelectCommand.Parameters.Add(new SqlParameter("@name", "%" + name + "%"));
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@names", "%" + name + "%"));
                 adapter.Fill(dt);
             }
 
@@ -72,6 +74,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             return Ok(dt);
 
         }
+
 
 
         [HttpGet]
@@ -433,11 +436,13 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
                 Sentencia = " declare @UserInvetory nvarchar(50) = @inventrier " +
                             " declare @ValorSQL nvarchar(100) = @values " +
                             " select a.NOMBRE as Nombre_f, a.BARRA as Barra_f, b.VAL_NORMAL, " +
+                            "a.DPTO, d.nombre as nam_dep," +
                             " a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.USUMODI, a.REFER, a.SERIE, a.cpadre, " +
                             " a.custodio, b.VALOR, b.cpadre as c_padre_f, isnull(ltrim(rtrim(c.NOMBRE + ' ' + c.APELLIDO)), '--') " +
                             " as NAME_CUSTODIO , b.NOMBRE, b.BARRA from DP12a120_F as a " +
                             " left join DP12a120 as b ON b.BARRA = a.BARRA " +
-                            " left join dp12a110 as c on C.CODIGO = a.CUSTODIO " +
+                            " left join dp12a110 as c on C.CODIGO = a.CUSTODIO" +
+                            " left join alptabla as d on master = '008' and d.codigo = a.DPTO " +
                             " where a.USUCREA != '' and(a.USUCREA = @UserInvetory) " +
                             " and " + value + " like @ValorSQL or a.CUSTODIO like @ValorSQL " +
                             " order by a.custodio " + option;
@@ -447,12 +452,14 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             {
                 Sentencia = " declare @UserInvetory nvarchar(50) = @inventrier " +
                             " declare @ValorSQL nvarchar(100) = @values " +
-                            " select a.NOMBRE as Nombre_f, a.BARRA as Barra_f, b.VAL_NORMAL, " +
+                            " select a.NOMBRE as Nombre_f, a.BARRA as Barra_f, b.VAL_NORMAL," +
+                            "a.DPTO, d.nombre as nam_dep," +
                             " a.placa, a.nombre, a.USUCREA, a.MARCA, a.FECHAC, a.MODELO, a.USUMODI, a.REFER, a.SERIE, a.cpadre, " +
                             " a.custodio, b.VALOR, b.cpadre as c_padre_f, isnull(ltrim(rtrim(c.NOMBRE + ' ' + c.APELLIDO)), '--') " +
                             " as NAME_CUSTODIO , b.NOMBRE, b.BARRA from DP12a120_F as a " +
                             " left join DP12a120 as b ON b.BARRA = a.BARRA " +
-                            " left join dp12a110 as c on C.CODIGO = a.CUSTODIO " +
+                            " left join dp12a110 as c on C.CODIGO = a.CUSTODIO" +
+                            " left join alptabla as d on master = '008' and d.codigo = a.DPTO " +
                             " where a.USUCREA != '' and(a.USUCREA = @UserInvetory) " +
                             " and " + valueSql + " like @values " +
                             " order by a.custodio " + option;
@@ -472,7 +479,7 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
 
             if (dt == null)
             {
-                return NotFound("");
+                return NotFound("No se encontro "  + valueSql);
             }
 
             return Ok(dt);

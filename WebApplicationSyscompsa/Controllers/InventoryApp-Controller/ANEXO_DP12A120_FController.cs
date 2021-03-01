@@ -22,6 +22,8 @@ namespace WebApplicationSyscompsa.Controllers.InventoryApp_Controller
             this._context = context;
         }
 
+
+
         [HttpPost]
         [Route("PostAnexo")]
         public async Task<IActionResult> PostAnexo([FromBody] ANEXO_DP12A120_F model)
